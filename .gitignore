@@ -1,0 +1,9 @@
+   .venv/
+   .venv.zip
+   *.zip
+   .idea/
+   __pycache__/
+   *.vmem
+   *.raw
+   *.dmp
+   *.mem

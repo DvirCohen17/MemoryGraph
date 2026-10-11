@@ -1,0 +1,139 @@
+{
+ "id": "local-win10",
+ "basis": "The image is the user's machine (user 'passmark', Windows 10 build 15063). It is NOT clean: it holds \\Windows\\Temp\\2964312081\\reach.exe. Verdicts were checked against raw Volatility rows on 2026-10-08; 'inconclusive' means the evidence does not decide.",
+ "facts": [
+  {
+   "id": "W10-P1",
+   "type": "process",
+   "name": "System",
+   "pid": 4,
+   "ppid": 0,
+   "description": "System (PID 4, parent 0)",
+   "verified": true,
+   "source": "Windows architecture"
+  },
+  {
+   "id": "W10-P2",
+   "type": "parent",
+   "name": "services.exe",
+   "parent_name": "wininit.exe",
+   "description": "services.exe is started by wininit.exe",
+   "verified": true,
+   "source": "Windows architecture"
+  },
+  {
+   "id": "W10-P3",
+   "type": "parent",
+   "name": "lsass.exe",
+   "parent_name": "wininit.exe",
+   "description": "lsass.exe is started by wininit.exe",
+   "verified": true,
+   "source": "Windows architecture"
+  },
+  {
+   "id": "W10-P4",
+   "type": "process",
+   "name": "svchost.exe",
+   "pid": 3828,
+   "hidden": true,
+   "description": "svchost.exe PID 3828 is in psscan and thrdscan but not pslist or csrss, no exit time (psxview raw row)",
+   "verified": true,
+   "source": "windows.psxview"
+  },
+  {
+   "id": "W10-P5",
+   "type": "process",
+   "name": "taskhostw.exe",
+   "pid": 6120,
+   "hidden": true,
+   "description": "taskhostw.exe PID 6120 is in psscan, thrdscan and csrss but not pslist, no exit time",
+   "verified": true,
+   "source": "windows.psxview"
+  },
+  {
+   "id": "W10-F1",
+   "type": "finding",
+   "rule_id": "FILE-001",
+   "min_severity": "Medium",
+   "description": "reach.exe in \\Windows\\Temp\\2964312081 (file object present in windows.filescan)",
+   "verified": true,
+   "source": "windows.filescan raw row"
+  },
+  {
+   "id": "W10-F2",
+   "type": "finding",
+   "rule_id": "PT-003",
+   "min_severity": "Low",
+   "pid": 3828,
+   "description": "psscan-only process 3828 is reported by PT-003, as Low: it was created at 06:51:27, after the acquisition had started (06:50:50), so it was caught mid-creation",
+   "verified": true,
+   "source": "windows.psxview"
+  },
+  {
+   "id": "W10-F3",
+   "type": "finding",
+   "rule_id": "MAL-001",
+   "pid": 2756,
+   "description": "hollowprocesses' note for svchost 2756 (no VAD at the image base) is reported",
+   "verified": true,
+   "source": "windows.malware.hollowprocesses raw row"
+  },
+  {
+   "id": "W10-N1",
+   "type": "plugin",
+   "name": "windows.netscan",
+   "status": "Completed",
+   "description": "windows.netscan completes on Windows 10 with Volatility 2.28.2",
+   "verified": true,
+   "source": "this run"
+  },
+  {
+   "id": "W10-N2",
+   "type": "plugin",
+   "name": "windows.netstat",
+   "status": "Completed",
+   "description": "windows.netstat completes on Windows 10 with Volatility 2.28.2",
+   "verified": true,
+   "source": "this run"
+  }
+ ],
+ "findings_review": {
+  "true_positive": [
+   {
+    "rule_id": "FILE-001",
+    "severity": "Medium",
+    "evidence_contains": "reach.exe",
+    "why": "the file object exists; an executable in \\Windows\\Temp is a lead (content not analysed)"
+   }
+  ],
+  "false_positive": [],
+  "inconclusive": [
+   {
+    "rule_id": "CBK-001",
+    "severity": "Low",
+    "why": "0x1f850f21394c is in no executable memory of any process; 0x894808708948 is instruction bytes: both probably windows.callbacks artifacts"
+   },
+   {
+    "rule_id": "MAL-001",
+    "severity": "Medium",
+    "why": "relays hollowprocesses' note for svchost 2756 (created at boot); no second plugin agrees, so it is Medium with low confidence"
+   },
+   {
+    "rule_id": "PT-003",
+    "severity": "Low",
+    "why": "created after the acquisition started: caught mid-creation, not proven hidden"
+   },
+   {
+    "rule_id": "MAL-006",
+    "severity": "Low",
+    "why": "driver object with no readable name (stale object), handlers in pool memory: nothing proven"
+   },
+   {
+    "rule_id": "MEM-001",
+    "severity": "Low",
+    "why": "taskhostw 7252 (the .NET NGEN task host: mscoreei.dll is in its memory map): explained"
+   }
+  ],
+  "fixed_false_positives": "RW-001 (UA-001 Medium for Public Desktop shortcuts), RW-002 (MAL-006 High for the unloaded USBSTOR and WudfRd drivers), RW-003 (LDR-001 for svchost PID 844) were confirmed false positives and are no longer produced."
+ }
+}

@@ -1,0 +1,116 @@
+{
+ "id": "local-xp-sp3",
+ "basis": "Facts marked verified:true were read from Volatility's raw rows of this image (windows.pslist / windows.callbacks / windows.filescan) by hand on 2026-10-08. verified:false facts are expectations without independent proof.",
+ "facts": [
+  {
+   "id": "XP-P1",
+   "type": "process",
+   "name": "Lab12-03.exe",
+   "pid": 1780,
+   "ppid": 1556,
+   "description": "Lab12-03.exe (PID 1780) started by explorer.exe (PID 1556)",
+   "verified": true,
+   "source": "windows.pslist"
+  },
+  {
+   "id": "XP-P2",
+   "type": "process",
+   "name": "procexp.exe",
+   "pid": 2016,
+   "ppid": 1556,
+   "description": "procexp.exe (PID 2016) started by explorer.exe",
+   "verified": true,
+   "source": "windows.pslist"
+  },
+  {
+   "id": "XP-P3",
+   "type": "process",
+   "name": "DumpIt.exe",
+   "pid": 2044,
+   "ppid": 1556,
+   "description": "DumpIt.exe (PID 2044) = the acquisition tool, started by explorer.exe",
+   "verified": true,
+   "source": "windows.pslist"
+  },
+  {
+   "id": "XP-P4",
+   "type": "parent",
+   "name": "services.exe",
+   "parent_name": "winlogon.exe",
+   "description": "services.exe is started by winlogon.exe (normal on XP)",
+   "verified": true,
+   "source": "Windows XP design + pslist"
+  },
+  {
+   "id": "XP-P5",
+   "type": "parent",
+   "name": "lsass.exe",
+   "parent_name": "winlogon.exe",
+   "description": "lsass.exe is started by winlogon.exe (normal on XP)",
+   "verified": true,
+   "source": "Windows XP design + pslist"
+  },
+  {
+   "id": "XP-N1",
+   "type": "plugin",
+   "name": "windows.netscan",
+   "status": "Skipped",
+   "description": "windows.netscan is skipped on XP (Volatility 3 does not support it), not shown as failed",
+   "verified": true,
+   "source": "Volatility message 'This version of Windows is not supported: 5.1'"
+  },
+  {
+   "id": "XP-N2",
+   "type": "plugin",
+   "name": "windows.netstat",
+   "status": "Skipped",
+   "description": "windows.netstat is skipped on XP",
+   "verified": true,
+   "source": "same"
+  },
+  {
+   "id": "XP-F1",
+   "type": "finding",
+   "rule_id": "FILE-001",
+   "min_severity": "Medium",
+   "description": "executable file in the Recycle Bin (\\RECYCLER\\...\\Dc23.exe1.0-rc2_signed.exe)",
+   "verified": true,
+   "source": "windows.filescan raw row"
+  },
+  {
+   "id": "XP-L1",
+   "type": "any_finding",
+   "process": "Lab12-03.exe",
+   "description": "something is reported about Lab12-03.exe (a Practical Malware Analysis sample on the Desktop): BEH-001 lists it as a Low lead",
+   "verified": false,
+   "source": "judgement from the file path only; the sample was not analysed"
+  },
+  {
+   "id": "XP-K1",
+   "type": "finding",
+   "rule_id": "CBK-001",
+   "min_severity": "Low",
+   "description": "CBK-001 reports the IoRegisterFsRegistrationChange value 0x1375c085 (no module, listed three times) as Low: it is in no executable memory of any process (High before RW-004, Medium in the first fix). Whether it is a real hook or a windows.callbacks artifact is NOT established",
+   "verified": false,
+   "source": "windows.callbacks raw rows"
+  }
+ ],
+ "findings_review": {
+  "true_positive": [
+   {
+    "rule_id": "FILE-001",
+    "severity": "Medium",
+    "evidence_contains": "Dc23.exe",
+    "why": "the file object exists in windows.filescan: an executable in the Recycle Bin (a lead; its content was not analysed)"
+   }
+  ],
+  "false_positive": [],
+  "inconclusive": [
+   {
+    "rule_id": "CBK-001",
+    "severity": "Low",
+    "why": "value 0x1375c085 three times with no module and in no executable memory: probably a windows.callbacks artifact"
+   }
+  ]
+ }
+}

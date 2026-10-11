@@ -1,0 +1,64 @@
+s for 113 files...
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Traceback (most recent call last):
+
+  File "<frozen runpy>", line 198, in _run_module_as_main
+
+  File "<frozen runpy>", line 88, in _run_code
+
+  File "C:\Users\test0\Downloads\testmem\pythonProject\.venv\Scripts\vol.exe\__main__.py", line 7, in <module>
+
+  File "C:\Users\test0\Downloads\testmem\pythonProject\.venv\Lib\site-packages\volatility3\cli\__init__.py", line 942, in main
+
+    CommandLine().run()
+
+  File "C:\Users\test0\Downloads\testmem\pythonProject\.venv\Lib\site-packages\volatility3\cli\__init__.py", line 527, in run
+
+    renderer.render(grid)
+
+  File "C:\Users\test0\Downloads\testmem\pythonProject\.venv\Lib\site-packages\volatility3\cli\text_renderer.py", line 612, in render
+
+    grid.populate(visitor, final_output)
+
+  File "C:\Users\test0\Downloads\testmem\pythonProject\.venv\Lib\site-packages\volatility3\framework\renderers\__init__.py", line 318, in populate
+
+    for level, item in self._generator:
+
+  File "C:\Users\test0\Downloads\testmem\pythonProject\.venv\Lib\site-packages\volatility3\framework\plugins\windows\netscan.py", line 390, in _generator
+
+    netscan_symbol_table = self.create_netscan_symbol_table(
+
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  File "C:\Users\test0\Downloads\testmem\pythonProject\.venv\Lib\site-packages\volatility3\framework\plugins\windows\netscan.py", line 347, in create_netscan_symbol_table
+
+    symbol_filename, class_types = cls.determine_tcpip_version(
+
+                                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+
+  File "C:\Users\test0\Downloads\testmem\pythonProject\.venv\Lib\site-packages\volatility3\framework\plugins\windows\netscan.py", line 318, in determine_tcpip_version
+
+    raise NotImplementedError(
+
+NotImplementedError: This version of Windows is not supported: 5.1 15.2600!
+

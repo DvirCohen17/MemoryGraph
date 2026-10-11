@@ -1,0 +1,41 @@
+{
+  "_about": "Memory images used for real-world testing. MemoryGraph does not download anything (no internet): put each image in the dumps folder (default ./testdumps, or --dumps-dir) under one of its file names, or set local_path. 'status' says what is known about the source from checking it on 2026-10-08.",
+  "dumps": [
+    {"id": "local-xp-sp3", "name": "TEST-50F6D361CC-20260924-154417.raw", "source": "local (user's own VM, captured with DumpIt)", "url": "", "os": "Windows XP SP3", "arch": "x86",
+     "image_type": "raw (DumpIt)", "challenge": "malware-analysis lab machine (Practical Malware Analysis samples on the desktop)",
+     "local_path": "C:\\Users\\test0\\Downloads\\TEST-50F6D361CC-20260924-154417.raw", "files": ["TEST-50F6D361CC-20260924-154417.raw"], "status": "available on this computer"},
+    {"id": "local-win10", "name": "WinDump.mem", "source": "local (user's own Windows 10 machine, captured with DumpIt)", "url": "", "os": "Windows 10", "arch": "x64",
+     "image_type": "raw (DumpIt)", "challenge": "none; presumed clean (NOT verified to be clean)",
+     "local_path": "C:\\Users\\test0\\Downloads\\WinDump\\WinDump.mem", "files": ["WinDump.mem"], "status": "available on this computer"},
+
+    {"id": "memlabs-1", "name": "MemLabs Lab 1 - Beginner's Luck", "source": "MemLabs", "url": "https://github.com/stuxnet999/MemLabs/tree/master/Lab%201", "os": "unknown", "arch": "unknown",
+     "image_type": "raw", "challenge": "Beginner's Luck", "files": ["MemoryDump_Lab1.raw"], "status": "NOT AVAILABLE: hosted on mega.nz (https://mega.nz/#!6l4BhKIb!l8ATZoliB_ULlvlkESwkPiXAETJEF7p91Gf9CWuQI70); needs a browser or a Mega client, not downloadable by script"},
+    {"id": "memlabs-2", "name": "MemLabs Lab 2 - A New World", "source": "MemLabs", "url": "https://github.com/stuxnet999/MemLabs/tree/master/Lab%202", "os": "unknown", "arch": "unknown",
+     "image_type": "raw", "challenge": "A New World", "files": ["MemoryDump_Lab2.raw"], "status": "NOT AVAILABLE: mega.nz (https://mega.nz/#!ChoDHaja!1XvuQd49c7-7kgJvPXIEAst-NXi8L3ggwienE1uoZTk)"},
+    {"id": "memlabs-3", "name": "MemLabs Lab 3 - The Evil's Den", "source": "MemLabs", "url": "https://github.com/stuxnet999/MemLabs/tree/master/Lab%203", "os": "unknown", "arch": "unknown",
+     "image_type": "raw", "challenge": "The Evil's Den", "files": ["MemoryDump_Lab3.raw"], "status": "NOT AVAILABLE: mega.nz (https://mega.nz/#!2ohlTAzL!1T5iGzhUWdn88zS1yrDJA06yUouZxC-VstzXFSRuzVg)"},
+    {"id": "memlabs-4", "name": "MemLabs Lab 4 - Obsession", "source": "MemLabs", "url": "https://github.com/stuxnet999/MemLabs/tree/master/Lab%204", "os": "unknown", "arch": "unknown",
+     "image_type": "raw", "challenge": "Obsession", "files": ["MemoryDump_Lab4.raw"], "status": "NOT AVAILABLE: mega.nz (https://mega.nz/#!Tx41jC5K!ifdu9DUair0sHncj5QWImJovfxixcAY-gt72mCXmYrE)"},
+    {"id": "memlabs-5", "name": "MemLabs Lab 5 - Black Tuesday", "source": "MemLabs", "url": "https://github.com/stuxnet999/MemLabs/tree/master/Lab%205", "os": "unknown", "arch": "unknown",
+     "image_type": "raw", "challenge": "Black Tuesday", "files": ["MemoryDump_Lab5.raw"], "status": "NOT AVAILABLE: mega.nz (https://mega.nz/#!Ps5ViIqZ!UQtKmUuKUcqqtt6elP_9OJtnAbpwwMD7lVKN1iWGoec)"},
+    {"id": "memlabs-6", "name": "MemLabs Lab 6 - The Reckoning", "source": "MemLabs", "url": "https://github.com/stuxnet999/MemLabs/tree/master/Lab%206", "os": "unknown", "arch": "unknown",
+     "image_type": "raw", "challenge": "The Reckoning", "files": ["MemoryDump_Lab6.raw"], "status": "NOT AVAILABLE: mega.nz (https://mega.nz/#!C0pjUKxI!LnedePAfsJvFgD-Uaa4-f1Tu0kl5bFDzW6Mn2Ng6pnM)"},
+
+    {"id": "vf-cridex", "name": "Cridex", "source": "Volatility Foundation wiki Memory-Samples", "url": "http://files.sempersecurus.org/dumps/cridex_memdump.zip", "os": "Windows XP SP2 (per the wiki)", "arch": "x86",
+     "image_type": "vmem (zip)", "challenge": "Malware - Cridex", "files": ["cridex.vmem"], "status": "NOT AVAILABLE: the URL answers HTTP 403 (checked 2026-10-08)"},
+    {"id": "vf-shylock", "name": "Shylock", "source": "Volatility Foundation wiki Memory-Samples", "url": "http://various-things.googlecode.com/files/vmem2.zip", "os": "Windows XP SP3 (per the wiki)", "arch": "x86",
+     "image_type": "vmem (zip)", "challenge": "Malware - Shylock", "files": ["shylock.vmem", "vmem2.vmem"], "status": "NOT AVAILABLE: the URL answers HTTP 404 (Google Code is gone)"},
+    {"id": "vf-r2d2", "name": "R2D2 (0zapftis)", "source": "Volatility Foundation wiki Memory-Samples", "url": "http://www.mediafire.com/file/yxqodp1p2aca91x/0zapftis.rar", "os": "Windows XP SP2 (per the wiki)", "arch": "x86",
+     "image_type": "rar", "challenge": "Malware - R2D2 (state trojan)", "files": ["0zapftis.vmem"], "status": "NOT AVAILABLE: a MediaFire page (HTML), not a direct download"},
+    {"id": "vf-blackenergy", "name": "BlackEnergy", "source": "NOT on the wiki's Memory-Samples page (checked 2026-10-08)", "url": "", "os": "unknown", "arch": "unknown", "image_type": "unknown",
+     "challenge": "BlackEnergy", "files": ["blackenergy.vmem"], "status": "NO SOURCE FOUND on the page you named; no URL to check"},
+    {"id": "vf-coreflood", "name": "CoreFlood", "source": "NOT on the wiki's Memory-Samples page", "url": "", "os": "unknown", "arch": "unknown", "image_type": "unknown",
+     "challenge": "CoreFlood", "files": ["coreflood.vmem"], "status": "NO SOURCE FOUND on the page you named"},
+    {"id": "vf-sality", "name": "Sality", "source": "NOT on the wiki's Memory-Samples page", "url": "", "os": "unknown", "arch": "unknown", "image_type": "unknown",
+     "challenge": "Sality", "files": ["sality.vmem"], "status": "NO SOURCE FOUND on the page you named"},
+    {"id": "vf-zeus", "name": "Zeus", "source": "NOT on the wiki's Memory-Samples page", "url": "", "os": "unknown", "arch": "unknown", "image_type": "unknown",
+     "challenge": "Zeus", "files": ["zeus.vmem"], "status": "NO SOURCE FOUND on the page you named"},
+    {"id": "vf-silentbanker", "name": "Silent Banker", "source": "NOT on the wiki's Memory-Samples page", "url": "", "os": "unknown", "arch": "unknown", "image_type": "unknown",
+     "challenge": "Silent Banker", "files": ["silentbanker.vmem"], "status": "NO SOURCE FOUND on the page you named"}
+  ]
+}

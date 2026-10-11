@@ -1,0 +1,9 @@
+xp 2.11.0 windows.netscan exit=1 seconds=38 bytes=391
+xp 2.11.0 windows.netstat exit=1 seconds=11 bytes=391
+xp 2.28.2 windows.netscan exit=1 seconds=50 bytes=2
+xp 2.28.2 windows.netstat exit=1 seconds=7 bytes=2
+w10 2.11.0 windows.netscan exit=1 seconds=41 bytes=391
+w10 2.11.0 windows.netstat exit=1 seconds=27 bytes=391
+w10 2.28.2 windows.netscan exit=0 seconds=99 bytes=52709
+w10 2.28.2 windows.netstat exit=0 seconds=3 bytes=27931
+FINISHED

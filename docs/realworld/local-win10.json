@@ -1,0 +1,1336 @@
+{
+ "entry": {
+  "id": "local-win10",
+  "name": "WinDump.mem",
+  "source": "local (user's own Windows 10 machine, captured with DumpIt)",
+  "url": "",
+  "os": "Windows 10",
+  "arch": "x64",
+  "image_type": "raw (DumpIt)",
+  "challenge": "none; presumed clean (NOT verified to be clean)",
+  "local_path": "C:\\Users\\test0\\Downloads\\WinDump\\WinDump.mem",
+  "files": [
+   "WinDump.mem"
+  ],
+  "status": "available on this computer"
+ },
+ "seconds": 2546,
+ "dump": "C:\\Users\\test0\\Downloads\\WinDump\\WinDump.mem",
+ "size_bytes": 5234491392,
+ "warnings": [
+  "windows.vadyarascan was skipped: it needs a value for 'yara_rules_file' in Settings (for example the path of your YARA rule file)."
+ ],
+ "counts": {
+  "processes": 155,
+  "connections": 141,
+  "memory_regions": 19,
+  "findings": 61
+ },
+ "plugins": [
+  {
+   "plugin": "windows.info",
+   "status": "Completed",
+   "rows": 20,
+   "seconds": 8,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.pslist",
+   "status": "Completed",
+   "rows": 139,
+   "seconds": 9,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.psscan",
+   "status": "Completed",
+   "rows": 160,
+   "seconds": 144,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.pstree",
+   "status": "Completed",
+   "rows": 139,
+   "seconds": 11,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.cmdline",
+   "status": "Completed",
+   "rows": 139,
+   "seconds": 11,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.getsids",
+   "status": "Completed",
+   "rows": 1662,
+   "seconds": 50,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.netscan",
+   "status": "Completed",
+   "rows": 174,
+   "seconds": 70,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.netstat",
+   "status": "Completed",
+   "rows": 92,
+   "seconds": 5,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.malfind",
+   "status": "Completed",
+   "rows": 19,
+   "seconds": 657,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.dlllist",
+   "status": "Completed",
+   "rows": 5779,
+   "seconds": 63,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.handles",
+   "status": "Completed",
+   "rows": 43472,
+   "seconds": 848,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.modules",
+   "status": "Completed",
+   "rows": 179,
+   "seconds": 8,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.modscan",
+   "status": "Completed",
+   "rows": 247,
+   "seconds": 46,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.ssdt",
+   "status": "Completed",
+   "rows": 669,
+   "seconds": 5,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.callbacks",
+   "status": "Completed",
+   "rows": 184,
+   "seconds": 72,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.svcscan",
+   "status": "Completed",
+   "rows": 1247,
+   "seconds": 62,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.driverscan",
+   "status": "Completed",
+   "rows": 151,
+   "seconds": 49,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.userassist",
+   "status": "Completed",
+   "rows": 83,
+   "seconds": 15,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.envars",
+   "status": "Completed",
+   "rows": 3728,
+   "seconds": 8,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.mutantscan",
+   "status": "Completed",
+   "rows": 788,
+   "seconds": 41,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.filescan",
+   "status": "Completed",
+   "rows": 32613,
+   "seconds": 378,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.vadinfo",
+   "status": "Completed",
+   "rows": 16165,
+   "seconds": 590,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.ldrmodules",
+   "status": "Completed",
+   "rows": 5936,
+   "seconds": 93,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.psxview",
+   "status": "Completed",
+   "rows": 156,
+   "seconds": 116,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [Run, machine]",
+   "status": "Completed",
+   "rows": 21,
+   "seconds": 18,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [RunOnce, machine]",
+   "status": "Completed",
+   "rows": 20,
+   "seconds": 14,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [Run, user]",
+   "status": "Completed",
+   "rows": 20,
+   "seconds": 13,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [RunOnce, user]",
+   "status": "Completed",
+   "rows": 22,
+   "seconds": 14,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [Winlogon]",
+   "status": "Completed",
+   "rows": 57,
+   "seconds": 15,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [AppInit]",
+   "status": "Completed",
+   "rows": 41,
+   "seconds": 14,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [IFEO]",
+   "status": "Completed",
+   "rows": 129,
+   "seconds": 17,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [Run, 32-bit]",
+   "status": "Completed",
+   "rows": 21,
+   "seconds": 15,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [RunOnce, 32-bit]",
+   "status": "Completed",
+   "rows": 20,
+   "seconds": 16,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [Explorer Run, machine]",
+   "status": "Completed",
+   "rows": 21,
+   "seconds": 17,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [Explorer Run, user]",
+   "status": "Completed",
+   "rows": 21,
+   "seconds": 19,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [Active Setup]",
+   "status": "Completed",
+   "rows": 174,
+   "seconds": 20,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [Services]",
+   "status": "Completed",
+   "rows": 15342,
+   "seconds": 271,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.scheduled_tasks",
+   "status": "Completed",
+   "rows": 232,
+   "seconds": 48,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.amcache",
+   "status": "Completed",
+   "rows": 1230,
+   "seconds": 177,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.malware.hollowprocesses",
+   "status": "Completed",
+   "rows": 1,
+   "seconds": 359,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.malware.suspicious_threads",
+   "status": "Completed",
+   "rows": 1,
+   "seconds": 384,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.malware.pebmasquerade",
+   "status": "Completed",
+   "rows": 139,
+   "seconds": 3,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.malware.processghosting",
+   "status": "Completed",
+   "rows": 0,
+   "seconds": 65,
+   "category": "Completed, 0 rows (possibly incomplete or nothing to report)",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.malware.svcdiff",
+   "status": "Completed",
+   "rows": 0,
+   "seconds": 57,
+   "category": "Completed, 0 rows (possibly incomplete or nothing to report)",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.etwpatch",
+   "status": "Completed",
+   "rows": 0,
+   "seconds": 99,
+   "category": "Completed, 0 rows (possibly incomplete or nothing to report)",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.driverirp",
+   "status": "Completed",
+   "rows": 4255,
+   "seconds": 50,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.shimcachemem",
+   "status": "Completed",
+   "rows": 13,
+   "seconds": 4,
+   "category": "OK",
+   "evidence": ""
+  }
+ ],
+ "checks": [
+  {
+   "area": "Processes",
+   "name": "same processes as Volatility (pslist ∪ psscan)",
+   "status": "PASS",
+   "detail": "Volatility 155, MemoryGraph 155",
+   "items": []
+  },
+  {
+   "area": "Processes",
+   "name": "process names",
+   "status": "PASS",
+   "detail": "155 compared",
+   "items": []
+  },
+  {
+   "area": "Processes",
+   "name": "parent PIDs (pslist PPID)",
+   "status": "PASS",
+   "detail": "139 compared",
+   "items": []
+  },
+  {
+   "area": "Processes",
+   "name": "command lines (windows.cmdline)",
+   "status": "PASS",
+   "detail": "139 compared",
+   "items": []
+  },
+  {
+   "area": "Processes",
+   "name": "hidden processes (psscan only, not exited)",
+   "status": "PASS",
+   "detail": "Volatility [3828, 6120], MemoryGraph [3828, 6120]",
+   "items": []
+  },
+  {
+   "area": "Modules",
+   "name": "DLL lists per process (windows.dlllist)",
+   "status": "PASS",
+   "detail": "124 processes, 5779 rows",
+   "items": []
+  },
+  {
+   "area": "Memory",
+   "name": "malfind regions (pid + start address)",
+   "status": "PASS",
+   "detail": "Volatility 19, MemoryGraph 19",
+   "items": []
+  },
+  {
+   "area": "Network",
+   "name": "every connection of Volatility 3 / 2 is in MemoryGraph (pid, protocol, local and remote address + port)",
+   "status": "PASS",
+   "detail": "from windows.netscan (174), windows.netstat (92); 118 distinct connections, MemoryGraph 118",
+   "items": []
+  },
+  {
+   "area": "Network",
+   "name": "connections only in MemoryGraph",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "Handles",
+   "name": "handle counts per process",
+   "status": "PASS",
+   "detail": "43472 handles, 125 processes",
+   "items": []
+  }
+ ],
+ "facts": [
+  {
+   "id": "W10-P1",
+   "description": "System (PID 4, parent 0)",
+   "verified": true,
+   "status": "PASS",
+   "detail": "PID 4, PPID 0",
+   "source": "Windows architecture"
+  },
+  {
+   "id": "W10-P2",
+   "description": "services.exe is started by wininit.exe",
+   "verified": true,
+   "status": "PASS",
+   "detail": "parent is wininit.exe",
+   "source": "Windows architecture"
+  },
+  {
+   "id": "W10-P3",
+   "description": "lsass.exe is started by wininit.exe",
+   "verified": true,
+   "status": "PASS",
+   "detail": "parent is wininit.exe",
+   "source": "Windows architecture"
+  },
+  {
+   "id": "W10-P4",
+   "description": "svchost.exe PID 3828 is in psscan and thrdscan but not pslist or csrss, no exit time (psxview raw row)",
+   "verified": true,
+   "status": "PASS",
+   "detail": "PID 3828, PPID 716",
+   "source": "windows.psxview"
+  },
+  {
+   "id": "W10-P5",
+   "description": "taskhostw.exe PID 6120 is in psscan, thrdscan and csrss but not pslist, no exit time",
+   "verified": true,
+   "status": "PASS",
+   "detail": "PID 6120, PPID 1568",
+   "source": "windows.psxview"
+  },
+  {
+   "id": "W10-F1",
+   "description": "reach.exe in \\Windows\\Temp\\2964312081 (file object present in windows.filescan)",
+   "verified": true,
+   "status": "PASS",
+   "detail": "Medium: 1 executable file object(s) in Public, Recycle Bin or Windows\\Temp",
+   "source": "windows.filescan raw row"
+  },
+  {
+   "id": "W10-F2",
+   "description": "psscan-only process 3828 is reported",
+   "verified": true,
+   "status": "PASS",
+   "detail": "Medium: Process present in psscan but not in pslist",
+   "source": "windows.psxview"
+  },
+  {
+   "id": "W10-F3",
+   "description": "hollowprocesses' note for svchost 2756 (no VAD at the image base) is reported",
+   "verified": true,
+   "status": "PASS",
+   "detail": "High: Process hollowing suspected: svchost.exe",
+   "source": "windows.malware.hollowprocesses raw row"
+  },
+  {
+   "id": "W10-N1",
+   "description": "windows.netscan completes on Windows 10 with Volatility 2.28.2",
+   "verified": true,
+   "status": "PASS",
+   "detail": "status Completed",
+   "source": "this run"
+  },
+  {
+   "id": "W10-N2",
+   "description": "windows.netstat completes on Windows 10 with Volatility 2.28.2",
+   "verified": true,
+   "status": "PASS",
+   "detail": "status Completed",
+   "source": "this run"
+  }
+ ],
+ "findings": [
+  {
+   "rule_id": "MAL-001",
+   "severity": "High",
+   "process": "svchost.exe (2756)",
+   "title": "Process hollowing suspected: svchost.exe",
+   "evidence": "There is no VAD starting at the base address of the process executable (0x7ff791320000)",
+   "source": "windows.malware.hollowprocesses",
+   "verdict": "Inconclusive",
+   "why": "relays hollowprocesses' note for svchost 2756 (created at boot); a missing VAD can also mean unreadable page tables"
+  },
+  {
+   "rule_id": "CBK-001",
+   "severity": "Medium",
+   "process": "-",
+   "title": "1 kernel callback(s) point into user-mode memory",
+   "evidence": "IoRegisterFsRegistrationChange @ 0x1f850f21394c",
+   "source": "windows.callbacks",
+   "verdict": "Inconclusive",
+   "why": "0x1f850f21394c is not a kernel address and has no module: probable windows.callbacks artifact, now Medium"
+  },
+  {
+   "rule_id": "DRV-002",
+   "severity": "Medium",
+   "process": "-",
+   "title": "2 driver object(s) are not backed by a loaded module",
+   "evidence": "WudfRd start=0xf802214e0000; ퟀ㮓讅￿Ԙꦡ翹 start=0xf802214b0000",
+   "source": "windows.driverscan, windows.modules",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "FILE-001",
+   "severity": "Medium",
+   "process": "-",
+   "title": "1 executable file object(s) in Public, Recycle Bin or Windows\\Temp",
+   "evidence": "\\Windows\\Temp\\2964312081\\reach.exe",
+   "source": "windows.filescan",
+   "verdict": "True Positive",
+   "why": "the file object exists; an executable in \\Windows\\Temp is a lead (content not analysed)"
+  },
+  {
+   "rule_id": "MAL-002",
+   "severity": "Medium",
+   "process": "CompatTelRunne (3672)",
+   "title": "1 thread(s) started in memory that no module backs in CompatTelRunne",
+   "evidence": "TID 1972 Win32Start @ 0x7ff69b425350 <Non-File Backed Region> — This thread started execution in the VAD starting at base address (0x7ff69b410000), which is not backed by a file",
+   "source": "windows.malware.suspicious_threads",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "MEM-001",
+   "severity": "Medium",
+   "process": "taskhostw.exe (7252)",
+   "title": "Executable private memory reported by malfind",
+   "evidence": "0x7ff66cd00000–0x7ff66cd9ffff (640.0 KB) PAGE_EXECUTE_READWRITE tag=VadS; 0x7ff66ccf0000–0x7ff66ccfffff (64.0 KB) PAGE_EXECUTE_READWRITE tag=VadS",
+   "source": "windows.malfind",
+   "verdict": "Inconclusive",
+   "why": "taskhostw 7252 RWX regions hold data; it started ngentask.exe when the .NET NGEN scheduled task was created: circumstantial evidence for benign, not proof"
+  },
+  {
+   "rule_id": "PT-003",
+   "severity": "Medium",
+   "process": "svchost.exe (3828)",
+   "title": "Process present in psscan but not in pslist",
+   "evidence": "svchost.exe (PID 3828) created 2018-06-21T06:51:27+00:00; Offset 0xd98df8dd2600",
+   "source": "windows.psscan, windows.pslist",
+   "verdict": "Inconclusive",
+   "why": "psscan/thrdscan only, no exit time: an unlinked process, or one caught while being created or terminated"
+  },
+  {
+   "rule_id": "PT-003",
+   "severity": "Medium",
+   "process": "taskhostw.exe (6120)",
+   "title": "Process present in psscan but not in pslist",
+   "evidence": "taskhostw.exe (PID 6120) created 2018-06-21T06:50:53+00:00; Offset 0xd98df95cf600",
+   "source": "windows.psscan, windows.pslist",
+   "verdict": "Inconclusive",
+   "why": "psscan/thrdscan only, no exit time: an unlinked process, or one caught while being created or terminated"
+  },
+  {
+   "rule_id": "CBK-001",
+   "severity": "Low",
+   "process": "-",
+   "title": "1 kernel callback value(s) that look like code bytes, not a routine address",
+   "evidence": "GenericKernelCallback @ 0x894808708948",
+   "source": "windows.callbacks",
+   "verdict": "Inconclusive",
+   "why": "0x894808708948: the bytes are instructions, not a pointer"
+  },
+  {
+   "rule_id": "DRV-001",
+   "severity": "Low",
+   "process": "-",
+   "title": "6 driver object(s) found by scan are not in the loaded-module list",
+   "evidence": "WpdUpFltr.sys base=0xf80221580000 path=\\SystemRoot\\System32\\drivers\\WpdUpFltr.sys; USBSTOR.SYS base=0xf802214b0000 path=\\SystemRoot\\System32\\drivers\\USBSTOR.SYS",
+   "source": "windows.modscan, windows.modules",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "LDR-001",
+   "severity": "Low",
+   "process": "wininit.exe (568)",
+   "title": "2 image(s) mapped in wininit.exe but missing from every loader list",
+   "evidence": "\\Windows\\System32\\wtsapi32.dll (base 0x7ff9a2ca0000); \\Windows\\System32\\winsta.dll (base 0x7ff9a5850000)",
+   "source": "windows.ldrmodules",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "LDR-001",
+   "severity": "Low",
+   "process": "SearchProtocol (1168)",
+   "title": "1 image(s) mapped in SearchProtocol but missing from every loader list",
+   "evidence": "\\Windows\\System32\\linkinfo.dll (base 0x7ff9a14e0000)",
+   "source": "windows.ldrmodules",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "LDR-001",
+   "severity": "Low",
+   "process": "SynTPEnh.exe (2192)",
+   "title": "42 image(s) mapped in SynTPEnh.exe but missing from every loader list",
+   "evidence": "\\Windows\\System32\\SynTPAPI.dll (base 0x59c50000); \\Windows\\System32\\winmmbase.dll (base 0x7ff9973a0000)",
+   "source": "windows.ldrmodules",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "LDR-001",
+   "severity": "Low",
+   "process": "svchost.exe (2764)",
+   "title": "1 image(s) mapped in svchost.exe but missing from every loader list",
+   "evidence": "\\Windows\\System32\\devrtl.dll (base 0x7ff9a20b0000)",
+   "source": "windows.ldrmodules",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "LDR-001",
+   "severity": "Low",
+   "process": "svchost.exe (2988)",
+   "title": "25 image(s) mapped in svchost.exe but missing from every loader list",
+   "evidence": "\\Windows\\System32\\vpnike.dll (base 0x7ff97c800000); \\Windows\\System32\\rascustom.dll (base 0x7ff97c790000)",
+   "source": "windows.ldrmodules",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "LDR-001",
+   "severity": "Low",
+   "process": "svchost.exe (3540)",
+   "title": "55 image(s) mapped in svchost.exe but missing from every loader list",
+   "evidence": "\\Windows\\System32\\wpncore.dll (base 0x7ff99cdc0000); \\Windows\\System32\\Windows.Networking.Connectivity.dll (base 0x7ff998380000)",
+   "source": "windows.ldrmodules",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "LDR-001",
+   "severity": "Low",
+   "process": "OneDrive.exe (4428)",
+   "title": "5 image(s) mapped in OneDrive.exe but missing from every loader list",
+   "evidence": "\\Windows\\SysWOW64\\Windows.Networking.Connectivity.dll (base 0x6f050000); \\Windows\\SysWOW64\\twinapi.appcore.dll (base 0x6ef10000)",
+   "source": "windows.ldrmodules",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "LDR-001",
+   "severity": "Low",
+   "process": "MOM.exe (4444)",
+   "title": "1 image(s) mapped in MOM.exe but missing from every loader list",
+   "evidence": "\\Windows\\System32\\user32.dll (base 0x7ff9a7130000)",
+   "source": "windows.ldrmodules",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "LDR-001",
+   "severity": "Low",
+   "process": "SearchUI.exe (5368)",
+   "title": "135 image(s) mapped in SearchUI.exe but missing from every loader list",
+   "evidence": "\\Windows\\System32\\msvcp110_win.dll (base 0x7ff9a18b0000); \\Windows\\SystemApps\\Microsoft.Windows.Cortana_cw5n1h2txyewy\\BingConfigurationClient.dll (base 0x7ff999710000)",
+   "source": "windows.ldrmodules",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "LDR-001",
+   "severity": "Low",
+   "process": "svchost.exe (5520)",
+   "title": "1 image(s) mapped in svchost.exe but missing from every loader list",
+   "evidence": "\\Windows\\System32\\svchost.exe (base 0x7ff791320000)",
+   "source": "windows.ldrmodules",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "LDR-001",
+   "severity": "Low",
+   "process": "ngentask.exe (6492)",
+   "title": "1 image(s) mapped in ngentask.exe but missing from every loader list",
+   "evidence": "\\Windows\\Microsoft.NET\\assembly\\GAC_MSIL\\System.Management\\v4.0_4.0.0.0__b03f5f7f11d50a3a\\System.Management.dll (base 0x4000000)",
+   "source": "windows.ldrmodules",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "LDR-001",
+   "severity": "Low",
+   "process": "ShellExperienc (7004)",
+   "title": "2 image(s) mapped in ShellExperienc but missing from every loader list",
+   "evidence": "\\Windows\\System32\\mfcore.dll (base 0x7ff985d20000); \\Windows\\System32\\devobj.dll (base 0x7ff9a49c0000)",
+   "source": "windows.ldrmodules",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "LDR-001",
+   "severity": "Low",
+   "process": "WmiPrvSE.exe (7080)",
+   "title": "18 image(s) mapped in WmiPrvSE.exe but missing from every loader list",
+   "evidence": "\\Windows\\System32\\wbem\\cimwin32.dll (base 0x7ff9889c0000); \\Windows\\System32\\wbem\\wmiutils.dll (base 0x7ff99b850000)",
+   "source": "windows.ldrmodules",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "LDR-001",
+   "severity": "Low",
+   "process": "svchost.exe (7496)",
+   "title": "37 image(s) mapped in svchost.exe but missing from every loader list",
+   "evidence": "\\Windows\\System32\\accountaccessor.dll (base 0x7ff989f10000); \\Windows\\System32\\cemapi.dll (base 0x7ff989e50000)",
+   "source": "windows.ldrmodules",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "LDR-001",
+   "severity": "Low",
+   "process": "explorer.exe (7688)",
+   "title": "56 image(s) mapped in explorer.exe but missing from every loader list",
+   "evidence": "\\Windows\\System32\\Windows.Media.dll (base 0x7ff9814f0000); \\Windows\\System32\\DDORes.dll (base 0x7ff978590000)",
+   "source": "windows.ldrmodules",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "LDR-001",
+   "severity": "Low",
+   "process": "SkypeHost.exe (9788)",
+   "title": "40 image(s) mapped in SkypeHost.exe but missing from every loader list",
+   "evidence": "\\Windows\\System32\\Windows.Storage.ApplicationData.dll (base 0x7ff9942e0000); \\Windows\\System32\\Windows.Networking.HostName.dll (base 0x7ff98eb70000)",
+   "source": "windows.ldrmodules",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "LDR-001",
+   "severity": "Low",
+   "process": "svchost.exe (9888)",
+   "title": "45 image(s) mapped in svchost.exe but missing from every loader list",
+   "evidence": "\\Windows\\System32\\devobj.dll (base 0x7ff9a49c0000); \\Windows\\System32\\wcncsvc.dll (base 0x7ff996c10000)",
+   "source": "windows.ldrmodules",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "MAL-006",
+   "severity": "Low",
+   "process": "-",
+   "title": "Driver object with an unreadable name: 5 IRP handler(s) point outside every module",
+   "evidence": "IRP_MJ_CLEANUP @ 0xd98df58a6540; IRP_MJ_POWER @ 0xd98df55d7260",
+   "source": "windows.driverirp",
+   "verdict": "Inconclusive",
+   "why": "driver object with no readable name (stale object), handlers in pool memory: nothing proven"
+  },
+  {
+   "rule_id": "MEM-001",
+   "severity": "Low",
+   "process": "CCC.exe (880)",
+   "title": "Executable private memory reported by malfind",
+   "evidence": "0x2bb040f0000–0x2bb040fffff (64.0 KB) PAGE_EXECUTE_READWRITE tag=VadS",
+   "source": "windows.malfind",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "MEM-001",
+   "severity": "Low",
+   "process": "ngentask.exe (1336)",
+   "title": "Executable private memory reported by malfind",
+   "evidence": "0x21149e50000–0x21149e5ffff (64.0 KB) PAGE_EXECUTE_READWRITE tag=VadS; 0x7ff5ffc50000–0x7ff5ffc5ffff (64.0 KB) PAGE_EXECUTE_READWRITE tag=VadS",
+   "source": "windows.malfind",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "MEM-001",
+   "severity": "Low",
+   "process": "MsMpEng.exe (2688)",
+   "title": "Executable private memory reported by malfind",
+   "evidence": "0x1ef80550000–0x1ef8065cfff (1.1 MB) PAGE_EXECUTE_READWRITE tag=VadS; 0x1ef808a0000–0x1ef809acfff (1.1 MB) PAGE_EXECUTE_READWRITE tag=VadS",
+   "source": "windows.malfind",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "MEM-001",
+   "severity": "Low",
+   "process": "MOM.exe (4444)",
+   "title": "Executable private memory reported by malfind",
+   "evidence": "0x23ac6580000–0x23ac658ffff (64.0 KB) PAGE_EXECUTE_READWRITE tag=VadS",
+   "source": "windows.malfind",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "MEM-001",
+   "severity": "Low",
+   "process": "SearchUI.exe (5368)",
+   "title": "Executable private memory reported by malfind",
+   "evidence": "0x249e6a40000–0x249e6a5ffff (128.0 KB) PAGE_EXECUTE_READWRITE tag=VadS",
+   "source": "windows.malfind",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "MEM-001",
+   "severity": "Low",
+   "process": "ngentask.exe (6492)",
+   "title": "Executable private memory reported by malfind",
+   "evidence": "0x19e0000–0x19effff (64.0 KB) PAGE_EXECUTE_READWRITE tag=VadS",
+   "source": "windows.malfind",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "UA-001",
+   "severity": "Low",
+   "process": "-",
+   "title": "4 program(s) started from Temp or Downloads (UserAssist)",
+   "evidence": "C:\\Users\\passmark\\Downloads\\ProcessMonitor\\Procmon.exe  (run count 1, last 2017-08-03T04:42:38+00:00); C:\\Users\\passmark\\AppData\\Local\\Temp\\Procmon64.exe  (run count 0, last unknown)",
+   "source": "windows.registry.userassist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "svchost.exe (72)",
+   "title": "3 executable image(s) mapped but not in the module list of svchost.exe",
+   "evidence": "\\Windows\\System32\\devobj.dll; \\Windows\\System32\\userenv.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "csrss.exe (468)",
+   "title": "1 executable image(s) mapped but not in the module list of csrss.exe",
+   "evidence": "\\Windows\\Microsoft.NET\\Framework64\\v4.0.30319\\mscoreei.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "wininit.exe (568)",
+   "title": "2 executable image(s) mapped but not in the module list of wininit.exe",
+   "evidence": "\\Windows\\System32\\wtsapi32.dll; \\Windows\\System32\\winsta.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "CCC.exe (880)",
+   "title": "154 executable image(s) mapped but not in the module list of CCC.exe",
+   "evidence": "\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static\\CLI.Component.Runtime.dll; \\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static\\CCC.Implementation.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "mcbuilder.exe (1048)",
+   "title": "9 executable image(s) mapped but not in the module list of mcbuilder.exe",
+   "evidence": "\\Windows\\System32\\netutils.dll; \\Windows\\System32\\wkscli.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "SearchProtocol (1168)",
+   "title": "6 executable image(s) mapped but not in the module list of SearchProtocol",
+   "evidence": "\\Windows\\System32\\edputil.dll; \\Windows\\System32\\cldapi.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "SynTPEnh.exe (2192)",
+   "title": "45 executable image(s) mapped but not in the module list of SynTPEnh.exe",
+   "evidence": "\\Windows\\System32\\SynTPAPI.dll; \\Windows\\System32\\winmmbase.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "svchost.exe (2748)",
+   "title": "1 executable image(s) mapped but not in the module list of svchost.exe",
+   "evidence": "\\Windows\\System32\\mintdh.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "svchost.exe (2764)",
+   "title": "1 executable image(s) mapped but not in the module list of svchost.exe",
+   "evidence": "\\Windows\\System32\\devrtl.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "svchost.exe (2988)",
+   "title": "42 executable image(s) mapped but not in the module list of svchost.exe",
+   "evidence": "\\Windows\\assembly\\NativeImages_v4.0.30319_64\\System.Xaml\\a0964a7cc2b3536bac4b487b94edcb55\\System.Xaml.ni.dll; \\Windows\\assembly\\NativeImages_v4.0.30319_64\\mscorlib\\ccb48f84a5cca36e9b0205b6a65ee54a\\mscorlib.ni.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "svchost.exe (3156)",
+   "title": "1 executable image(s) mapped but not in the module list of svchost.exe",
+   "evidence": "\\Windows\\System32\\clbcatq.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "svchost.exe (3540)",
+   "title": "55 executable image(s) mapped but not in the module list of svchost.exe",
+   "evidence": "\\Windows\\System32\\wpncore.dll; \\Windows\\System32\\Windows.Networking.Connectivity.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "OneDrive.exe (4428)",
+   "title": "7 executable image(s) mapped but not in the module list of OneDrive.exe",
+   "evidence": "\\Windows\\SysWOW64\\Windows.Networking.Connectivity.dll; \\Windows\\SysWOW64\\twinapi.appcore.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "MOM.exe (4444)",
+   "title": "67 executable image(s) mapped but not in the module list of MOM.exe",
+   "evidence": "\\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static\\LOG.Foundation.Implementation.dll; \\Program Files (x86)\\ATI Technologies\\ATI.ACE\\Core-Static\\LOG.Foundation.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "audiodg.exe (4596)",
+   "title": "1 executable image(s) mapped but not in the module list of audiodg.exe",
+   "evidence": "\\Windows\\System32\\iertutil.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "SearchUI.exe (5368)",
+   "title": "140 executable image(s) mapped but not in the module list of SearchUI.exe",
+   "evidence": "\\Windows\\System32\\msvcp110_win.dll; \\Windows\\SystemApps\\Microsoft.Windows.Cortana_cw5n1h2txyewy\\BingConfigurationClient.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "ngentask.exe (6492)",
+   "title": "1 executable image(s) mapped but not in the module list of ngentask.exe",
+   "evidence": "\\Windows\\Microsoft.NET\\assembly\\GAC_MSIL\\System.Management\\v4.0_4.0.0.0__b03f5f7f11d50a3a\\System.Management.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "ShellExperienc (7004)",
+   "title": "5 executable image(s) mapped but not in the module list of ShellExperienc",
+   "evidence": "\\Windows\\System32\\Windows.Media.dll; \\Windows\\System32\\mfcore.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "WmiPrvSE.exe (7080)",
+   "title": "22 executable image(s) mapped but not in the module list of WmiPrvSE.exe",
+   "evidence": "\\Windows\\System32\\wbem\\cimwin32.dll; \\Windows\\System32\\wbem\\wmiutils.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "RuntimeBroker. (7220)",
+   "title": "1 executable image(s) mapped but not in the module list of RuntimeBroker.",
+   "evidence": "\\Windows\\System32\\thumbcache.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "svchost.exe (7496)",
+   "title": "42 executable image(s) mapped but not in the module list of svchost.exe",
+   "evidence": "\\Windows\\System32\\accountaccessor.dll; \\Windows\\System32\\cemapi.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "explorer.exe (7688)",
+   "title": "62 executable image(s) mapped but not in the module list of explorer.exe",
+   "evidence": "\\Windows\\assembly\\NativeImages_v4.0.30319_64\\mscorlib\\ccb48f84a5cca36e9b0205b6a65ee54a\\mscorlib.ni.dll; \\Windows\\System32\\Windows.Media.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "svchost.exe (7812)",
+   "title": "12 executable image(s) mapped but not in the module list of svchost.exe",
+   "evidence": "\\Windows\\System32\\xmllite.dll; \\Windows\\System32\\samcli.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "SkypeHost.exe (9788)",
+   "title": "52 executable image(s) mapped but not in the module list of SkypeHost.exe",
+   "evidence": "\\Program Files\\WindowsApps\\Microsoft.VCLibs.140.00_14.0.25426.0_x64__8wekyb3d8bbwe\\vccorlib140_app.dll; \\Windows\\System32\\Windows.Storage.ApplicationData.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "svchost.exe (9888)",
+   "title": "45 executable image(s) mapped but not in the module list of svchost.exe",
+   "evidence": "\\Windows\\System32\\devobj.dll; \\Windows\\System32\\wcncsvc.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "VAD-001",
+   "severity": "Low",
+   "process": "remsh.exe (9932)",
+   "title": "62 executable image(s) mapped but not in the module list of remsh.exe",
+   "evidence": "\\Windows\\System32\\winhttp.dll; \\Windows\\System32\\netapi32.dll",
+   "source": "windows.vadinfo, windows.dlllist",
+   "verdict": "Unreviewed",
+   "why": ""
+  }
+ ],
+ "ui": [
+  {
+   "area": "UI",
+   "name": "view 'Overview' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Search' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Process Tree' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Indications' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Injection' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Plugin Output' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Files' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Registry' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Network' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Timeline' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Lifetimes' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Compare' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Case Notes' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Computer Info' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "Process Tree lists every process",
+   "status": "PASS",
+   "detail": "155 shown, 155 in the result",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "Network view holds every connection",
+   "status": "PASS",
+   "detail": "141 rows, 141 connections in the result; 141 of 141 connections shown",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "Indications view shows the findings",
+   "status": "PASS",
+   "detail": "14 tree rows for 61 findings (Low findings are hidden by default)",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "Plugin Output offers every completed plugin",
+   "status": "PASS",
+   "detail": "44 plugins tried",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "every process window opens",
+   "status": "PASS",
+   "detail": "155 tried",
+   "items": []
+  }
+ ],
+ "os_profile": {
+  "name": "Windows 10 / Server 2016-2019 (x64, NT 10.0, build 15063)",
+  "family": "10",
+  "nt": "10.0",
+  "build": 15063,
+  "service_pack": 0,
+  "is64": true,
+  "volatility2_profile": ""
+ },
+ "severity_distribution": {
+  "High": 1,
+  "Medium": 7,
+  "Low": 53
+ },
+ "rule_distribution": {
+  "MAL-001": 1,
+  "CBK-001": 2,
+  "DRV-002": 1,
+  "FILE-001": 1,
+  "MAL-002": 1,
+  "MEM-001": 7,
+  "PT-003": 2,
+  "DRV-001": 1,
+  "LDR-001": 17,
+  "MAL-006": 1,
+  "UA-001": 1,
+  "VAD-001": 26
+ }
+}

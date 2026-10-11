@@ -1,0 +1,838 @@
+{
+ "entry": {
+  "id": "local-xp-sp3",
+  "name": "TEST-50F6D361CC-20260924-154417.raw",
+  "source": "local (user's own VM, captured with DumpIt)",
+  "url": "",
+  "os": "Windows XP SP3",
+  "arch": "x86",
+  "image_type": "raw (DumpIt)",
+  "challenge": "malware-analysis lab machine (Practical Malware Analysis samples on the desktop)",
+  "local_path": "C:\\Users\\test0\\Downloads\\TEST-50F6D361CC-20260924-154417.raw",
+  "files": [
+   "TEST-50F6D361CC-20260924-154417.raw"
+  ],
+  "status": "available on this computer"
+ },
+ "seconds": 407,
+ "dump": "C:\\Users\\test0\\Downloads\\TEST-50F6D361CC-20260924-154417.raw",
+ "size_bytes": 536870912,
+ "warnings": [
+  "Not run because they do not exist for this Windows version: windows.netscan, windows.netstat, windows.registry.scheduled_tasks, windows.registry.amcache, windows.malware.svcdiff (see Plugin Output for the reason).",
+  "windows.vadyarascan was skipped: it needs a value for 'yara_rules_file' in Settings (for example the path of your YARA rule file)."
+ ],
+ "counts": {
+  "processes": 27,
+  "connections": 19,
+  "memory_regions": 15,
+  "findings": 9
+ },
+ "plugins": [
+  {
+   "plugin": "windows.info",
+   "status": "Completed",
+   "rows": 23,
+   "seconds": 25,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.pslist",
+   "status": "Completed",
+   "rows": 27,
+   "seconds": 13,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.psscan",
+   "status": "Completed",
+   "rows": 27,
+   "seconds": 22,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.pstree",
+   "status": "Completed",
+   "rows": 27,
+   "seconds": 15,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.cmdline",
+   "status": "Completed",
+   "rows": 27,
+   "seconds": 14,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.getsids",
+   "status": "Completed",
+   "rows": 196,
+   "seconds": 18,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.netscan",
+   "status": "Skipped",
+   "rows": 0,
+   "seconds": 0,
+   "category": "Skipped by MemoryGraph: not applicable to this Windows",
+   "evidence": "windows.netscan needs Windows Vista or newer; this image is Windows XP SP3. Network connections for this image come from Volatility 2 instead (vol2.connections, vol2.sockets)."
+  },
+  {
+   "plugin": "windows.netstat",
+   "status": "Skipped",
+   "rows": 0,
+   "seconds": 0,
+   "category": "Skipped by MemoryGraph: not applicable to this Windows",
+   "evidence": "windows.netstat needs Windows Vista or newer; this image is Windows XP SP3. Network connections for this image come from Volatility 2 instead (vol2.connections, vol2.sockets)."
+  },
+  {
+   "plugin": "windows.malfind",
+   "status": "Completed",
+   "rows": 15,
+   "seconds": 33,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.dlllist",
+   "status": "Completed",
+   "rows": 1172,
+   "seconds": 16,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.handles",
+   "status": "Completed",
+   "rows": 5751,
+   "seconds": 43,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.modules",
+   "status": "Completed",
+   "rows": 122,
+   "seconds": 12,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.modscan",
+   "status": "Completed",
+   "rows": 125,
+   "seconds": 13,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.ssdt",
+   "status": "Completed",
+   "rows": 322,
+   "seconds": 10,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.callbacks",
+   "status": "Completed",
+   "rows": 31,
+   "seconds": 15,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.svcscan",
+   "status": "Completed",
+   "rows": 264,
+   "seconds": 10,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.driverscan",
+   "status": "Completed",
+   "rows": 101,
+   "seconds": 10,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.userassist",
+   "status": "Completed",
+   "rows": 39,
+   "seconds": 9,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.envars",
+   "status": "Completed",
+   "rows": 559,
+   "seconds": 7,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.mutantscan",
+   "status": "Completed",
+   "rows": 233,
+   "seconds": 8,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.filescan",
+   "status": "Completed",
+   "rows": 1798,
+   "seconds": 17,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.vadinfo",
+   "status": "Completed",
+   "rows": 2937,
+   "seconds": 25,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.ldrmodules",
+   "status": "Completed",
+   "rows": 1101,
+   "seconds": 16,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.psxview",
+   "status": "Completed",
+   "rows": 50,
+   "seconds": 18,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [Run, machine]",
+   "status": "Completed",
+   "rows": 15,
+   "seconds": 12,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [RunOnce, machine]",
+   "status": "Completed",
+   "rows": 12,
+   "seconds": 15,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [Run, user]",
+   "status": "Completed",
+   "rows": 9,
+   "seconds": 15,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [RunOnce, user]",
+   "status": "Completed",
+   "rows": 13,
+   "seconds": 16,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [Winlogon]",
+   "status": "Completed",
+   "rows": 47,
+   "seconds": 16,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [AppInit]",
+   "status": "Completed",
+   "rows": 19,
+   "seconds": 18,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [IFEO]",
+   "status": "Completed",
+   "rows": 135,
+   "seconds": 20,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [Run, 32-bit]",
+   "status": "Completed",
+   "rows": 13,
+   "seconds": 17,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [RunOnce, 32-bit]",
+   "status": "Completed",
+   "rows": 13,
+   "seconds": 16,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [Explorer Run, machine]",
+   "status": "Completed",
+   "rows": 13,
+   "seconds": 17,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [Explorer Run, user]",
+   "status": "Completed",
+   "rows": 13,
+   "seconds": 17,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [Active Setup]",
+   "status": "Completed",
+   "rows": 253,
+   "seconds": 16,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.printkey [Services]",
+   "status": "Completed",
+   "rows": 5484,
+   "seconds": 63,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.registry.scheduled_tasks",
+   "status": "Skipped",
+   "rows": 0,
+   "seconds": 0,
+   "category": "Skipped by MemoryGraph: not applicable to this Windows",
+   "evidence": "windows.registry.scheduled_tasks needs Windows Vista or newer; this image is Windows XP SP3."
+  },
+  {
+   "plugin": "windows.registry.amcache",
+   "status": "Skipped",
+   "rows": 0,
+   "seconds": 0,
+   "category": "Skipped by MemoryGraph: not applicable to this Windows",
+   "evidence": "windows.registry.amcache needs Windows 7 or newer; this image is Windows XP SP3."
+  },
+  {
+   "plugin": "windows.malware.hollowprocesses",
+   "status": "Completed",
+   "rows": 0,
+   "seconds": 22,
+   "category": "Completed, 0 rows (possibly incomplete or nothing to report)",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.malware.suspicious_threads",
+   "status": "Completed",
+   "rows": 6,
+   "seconds": 21,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.malware.pebmasquerade",
+   "status": "Completed",
+   "rows": 27,
+   "seconds": 8,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.malware.processghosting",
+   "status": "Completed",
+   "rows": 0,
+   "seconds": 15,
+   "category": "Completed, 0 rows (possibly incomplete or nothing to report)",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.malware.svcdiff",
+   "status": "Skipped",
+   "rows": 0,
+   "seconds": 0,
+   "category": "Skipped by MemoryGraph: not applicable to this Windows",
+   "evidence": "windows.malware.svcdiff needs Windows 10 or newer; this image is Windows XP SP3."
+  },
+  {
+   "plugin": "windows.etwpatch",
+   "status": "Completed",
+   "rows": 0,
+   "seconds": 16,
+   "category": "Completed, 0 rows (possibly incomplete or nothing to report)",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.driverirp",
+   "status": "Completed",
+   "rows": 2828,
+   "seconds": 13,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "windows.shimcachemem",
+   "status": "Completed",
+   "rows": 25,
+   "seconds": 19,
+   "category": "OK",
+   "evidence": ""
+  },
+  {
+   "plugin": "vol2.connections",
+   "status": "Completed",
+   "rows": 0,
+   "seconds": 15,
+   "category": "Completed, 0 rows (possibly incomplete or nothing to report)",
+   "evidence": ""
+  },
+  {
+   "plugin": "vol2.sockets",
+   "status": "Completed",
+   "rows": 19,
+   "seconds": 11,
+   "category": "OK",
+   "evidence": ""
+  }
+ ],
+ "checks": [
+  {
+   "area": "Processes",
+   "name": "same processes as Volatility (pslist ∪ psscan)",
+   "status": "PASS",
+   "detail": "Volatility 27, MemoryGraph 27",
+   "items": []
+  },
+  {
+   "area": "Processes",
+   "name": "process names",
+   "status": "PASS",
+   "detail": "27 compared",
+   "items": []
+  },
+  {
+   "area": "Processes",
+   "name": "parent PIDs (pslist PPID)",
+   "status": "PASS",
+   "detail": "27 compared",
+   "items": []
+  },
+  {
+   "area": "Processes",
+   "name": "command lines (windows.cmdline)",
+   "status": "PASS",
+   "detail": "27 compared",
+   "items": []
+  },
+  {
+   "area": "Processes",
+   "name": "hidden processes (psscan only, not exited)",
+   "status": "PASS",
+   "detail": "Volatility [], MemoryGraph []",
+   "items": []
+  },
+  {
+   "area": "Modules",
+   "name": "DLL lists per process (windows.dlllist)",
+   "status": "PASS",
+   "detail": "26 processes, 1172 rows",
+   "items": []
+  },
+  {
+   "area": "Memory",
+   "name": "malfind regions (pid + start address)",
+   "status": "PASS",
+   "detail": "Volatility 15, MemoryGraph 15",
+   "items": []
+  },
+  {
+   "area": "Network",
+   "name": "windows.netscan",
+   "status": "INCONCLUSIVE",
+   "detail": "Skipped: windows.netscan needs Windows Vista or newer; this image is Windows XP SP3. Network connections for this image come from Volatility 2 instead (vol2.connections, vol2.sockets).",
+   "items": []
+  },
+  {
+   "area": "Network",
+   "name": "windows.netstat",
+   "status": "INCONCLUSIVE",
+   "detail": "Skipped: windows.netstat needs Windows Vista or newer; this image is Windows XP SP3. Network connections for this image come from Volatility 2 instead (vol2.connections, vol2.sockets).",
+   "items": []
+  },
+  {
+   "area": "Network",
+   "name": "every connection of Volatility 3 / 2 is in MemoryGraph (pid, protocol, local and remote address + port)",
+   "status": "PASS",
+   "detail": "from vol2.sockets (19); 19 distinct connections, MemoryGraph 19",
+   "items": []
+  },
+  {
+   "area": "Network",
+   "name": "connections only in MemoryGraph",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "Handles",
+   "name": "handle counts per process",
+   "status": "PASS",
+   "detail": "5751 handles, 27 processes",
+   "items": []
+  }
+ ],
+ "facts": [
+  {
+   "id": "XP-P1",
+   "description": "Lab12-03.exe (PID 1780) started by explorer.exe (PID 1556)",
+   "verified": true,
+   "status": "PASS",
+   "detail": "PID 1780, PPID 1556",
+   "source": "windows.pslist"
+  },
+  {
+   "id": "XP-P2",
+   "description": "procexp.exe (PID 2016) started by explorer.exe",
+   "verified": true,
+   "status": "PASS",
+   "detail": "PID 2016, PPID 1556",
+   "source": "windows.pslist"
+  },
+  {
+   "id": "XP-P3",
+   "description": "DumpIt.exe (PID 2044) = the acquisition tool, started by explorer.exe",
+   "verified": true,
+   "status": "PASS",
+   "detail": "PID 2044, PPID 1556",
+   "source": "windows.pslist"
+  },
+  {
+   "id": "XP-P4",
+   "description": "services.exe is started by winlogon.exe (normal on XP)",
+   "verified": true,
+   "status": "PASS",
+   "detail": "parent is winlogon.exe",
+   "source": "Windows XP design + pslist"
+  },
+  {
+   "id": "XP-P5",
+   "description": "lsass.exe is started by winlogon.exe (normal on XP)",
+   "verified": true,
+   "status": "PASS",
+   "detail": "parent is winlogon.exe",
+   "source": "Windows XP design + pslist"
+  },
+  {
+   "id": "XP-N1",
+   "description": "windows.netscan is skipped on XP (Volatility 3 does not support it), not shown as failed",
+   "verified": true,
+   "status": "PASS",
+   "detail": "status Skipped",
+   "source": "Volatility message 'This version of Windows is not supported: 5.1'"
+  },
+  {
+   "id": "XP-N2",
+   "description": "windows.netstat is skipped on XP",
+   "verified": true,
+   "status": "PASS",
+   "detail": "status Skipped",
+   "source": "same"
+  },
+  {
+   "id": "XP-F1",
+   "description": "executable file in the Recycle Bin (\\RECYCLER\\...\\Dc23.exe1.0-rc2_signed.exe)",
+   "verified": true,
+   "status": "PASS",
+   "detail": "Medium: 1 executable file object(s) in Public, Recycle Bin or Windows\\Temp",
+   "source": "windows.filescan raw row"
+  },
+  {
+   "id": "XP-L1",
+   "description": "something is reported about Lab12-03.exe, a Practical Malware Analysis lab sample running from the Desktop",
+   "verified": false,
+   "status": "FAIL",
+   "detail": "no finding on this process",
+   "source": "judgement from the file path only; the sample was not analysed"
+  },
+  {
+   "id": "XP-K1",
+   "description": "CBK-001 for the IoRegisterFsRegistrationChange value 0x1375c085 (no module, listed three times) is reported, as Medium (was High before RW-004). Whether it is a real hook or a windows.callbacks artifact is NOT established",
+   "verified": false,
+   "status": "PASS",
+   "detail": "Medium: 1 kernel callback(s) point into user-mode memory",
+   "source": "windows.callbacks raw rows"
+  }
+ ],
+ "findings": [
+  {
+   "rule_id": "CBK-001",
+   "severity": "Medium",
+   "process": "-",
+   "title": "1 kernel callback(s) point into user-mode memory",
+   "evidence": "IoRegisterFsRegistrationChange @ 0x1375c085",
+   "source": "windows.callbacks",
+   "verdict": "Inconclusive",
+   "why": "value 0x1375c085 three times with no module; the Windows 10 image shows the same pattern, so a windows.callbacks artifact is likely but unproven"
+  },
+  {
+   "rule_id": "CBK-001",
+   "severity": "Medium",
+   "process": "-",
+   "title": "1 kernel callback(s) point outside every loaded module",
+   "evidence": "GenericKernelCallback @ 0xf41b53e8",
+   "source": "windows.callbacks",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "FILE-001",
+   "severity": "Medium",
+   "process": "-",
+   "title": "1 executable file object(s) in Public, Recycle Bin or Windows\\Temp",
+   "evidence": "\\RECYCLER\\S-1-5-21-1659004503-412668190-1644491937-500\\Dc23.exe1.0-rc2_signed.exe",
+   "source": "windows.filescan",
+   "verdict": "True Positive",
+   "why": "the file object exists in windows.filescan: an executable in the Recycle Bin (a lead; its content was not analysed)"
+  },
+  {
+   "rule_id": "DRV-001",
+   "severity": "Low",
+   "process": "-",
+   "title": "2 driver object(s) found by scan are not in the loaded-module list",
+   "evidence": "drmkaud.sys base=0xf8de5000; DMusic.sys base=0xb2bde000 path=(unreadable name)",
+   "source": "windows.modscan, windows.modules",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "FILE-001",
+   "severity": "Low",
+   "process": "-",
+   "title": "2 executable file object(s) in Temp or Downloads",
+   "evidence": "\\DOCUME~1\\ADMINI~1\\LOCALS~1\\Temp\\winup.exe; \\Documents and Settings\\Administrator\\Local Settings\\Temp\\vmware-Administrator\\VMwareDnD\\13d027df\\Everything\\Everything.exe",
+   "source": "windows.filescan",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "MEM-001",
+   "severity": "Low",
+   "process": "csrss.exe (612)",
+   "title": "Executable private memory reported by malfind",
+   "evidence": "0x7f6f0000–0x7f7effff (1.0 MB) PAGE_EXECUTE_READWRITE tag=Vad ",
+   "source": "windows.malfind",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "MEM-001",
+   "severity": "Low",
+   "process": "winlogon.exe (640)",
+   "title": "Executable private memory reported by malfind",
+   "evidence": "0x580000–0x59ffff (128.0 KB) PAGE_EXECUTE_READ tag=Vad ; 0x3e750000–0x3e753fff (16.0 KB) PAGE_EXECUTE_READWRITE tag=VadS",
+   "source": "windows.malfind",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "MEM-001",
+   "severity": "Low",
+   "process": "explorer.exe (1556)",
+   "title": "Executable private memory reported by malfind",
+   "evidence": "0x2080000–0x2080fff (4.0 KB) PAGE_EXECUTE_READWRITE tag=VadS",
+   "source": "windows.malfind",
+   "verdict": "Unreviewed",
+   "why": ""
+  },
+  {
+   "rule_id": "MEM-001",
+   "severity": "Low",
+   "process": "procexp.exe (2016)",
+   "title": "Executable private memory reported by malfind",
+   "evidence": "0x8d0000–0xbcffff (3.0 MB) PAGE_EXECUTE_READ tag=Vad ; 0x7f6f0000–0x7f7effff (1.0 MB) PAGE_EXECUTE_READ tag=Vad ",
+   "source": "windows.malfind",
+   "verdict": "Unreviewed",
+   "why": ""
+  }
+ ],
+ "ui": [
+  {
+   "area": "UI",
+   "name": "view 'Overview' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Search' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Process Tree' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Indications' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Injection' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Plugin Output' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Files' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Registry' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Network' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Timeline' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Lifetimes' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Compare' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Case Notes' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "view 'Computer Info' builds",
+   "status": "PASS",
+   "detail": "",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "Process Tree lists every process",
+   "status": "PASS",
+   "detail": "27 shown, 27 in the result",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "Network view holds every connection",
+   "status": "PASS",
+   "detail": "19 rows, 19 connections in the result; 19 of 19 connections shown",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "Indications view shows the findings",
+   "status": "PASS",
+   "detail": "4 tree rows for 9 findings (Low findings are hidden by default)",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "Plugin Output offers every completed plugin",
+   "status": "PASS",
+   "detail": "40 plugins tried",
+   "items": []
+  },
+  {
+   "area": "UI",
+   "name": "every process window opens",
+   "status": "PASS",
+   "detail": "27 tried",
+   "items": []
+  }
+ ],
+ "os_profile": {
+  "name": "Windows XP SP3 (x86, NT 5.1, build 2600)",
+  "family": "xp",
+  "nt": "5.1",
+  "build": 2600,
+  "service_pack": 3,
+  "is64": false,
+  "volatility2_profile": "WinXPSP3x86"
+ },
+ "severity_distribution": {
+  "Medium": 3,
+  "Low": 6
+ },
+ "rule_distribution": {
+  "CBK-001": 2,
+  "FILE-001": 2,
+  "DRV-001": 1,
+  "MEM-001": 4
+ }
+}

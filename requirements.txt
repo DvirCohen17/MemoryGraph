@@ -1,0 +1,6 @@
+PySide6>=6.8,<7
+volatility3==2.28.2
+# optional Volatility features MemoryGraph uses when present (ranges follow volatility3 2.28.2's own "full" extra)
+capstone>=5.0.3,<6        # disassembly text in the malfind memory view
+yara-python>=4.5.1,<5     # windows.vadyarascan (your YARA rules -> IOC-006)
+pytest>=8,<9

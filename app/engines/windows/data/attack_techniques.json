@@ -1,0 +1,181 @@
+{
+  "_about": "Local reference for the MITRE ATT&CK technique ids MemoryGraph tags findings with. Written for offline use: nothing here is fetched from the internet. Names follow ATT&CK v15; the descriptions are short summaries in MemoryGraph's own words, not MITRE's text. Edit or extend this file freely (keep the JSON shape).",
+  "techniques": {
+    "T1003.001": {
+      "tactics": [
+        "Credential Access"
+      ],
+      "summary": "Reading the memory of the LSASS process (or dumping it) to extract password hashes, tickets and plaintext credentials.",
+      "look_for": "A process that is not a Windows component holding a handle to lsass.exe with memory-read access; procdump/comsvcs/rundll32 command lines; .dmp files created shortly afterwards."
+    },
+    "T1014": {
+      "tactics": [
+        "Defense Evasion"
+      ],
+      "summary": "Rootkit behaviour: hiding processes, drivers, files or connections from the operating system's own listings.",
+      "look_for": "Objects that a scan finds but a list walk does not (psscan vs pslist, modscan vs modules, psxview columns); kernel callbacks or system-call table entries that point outside any known module."
+    },
+    "T1027": {
+      "tactics": [
+        "Defense Evasion"
+      ],
+      "summary": "Making content hard to read or detect: encoding, encryption, packing or splitting strings.",
+      "look_for": "Base64/-EncodedCommand blobs, long escaped or concatenated strings, high-entropy sections in a dumped file. Decode what you can and read where it came from."
+    },
+    "T1036": {
+      "tactics": [
+        "Defense Evasion"
+      ],
+      "summary": "Making malicious software look like something legitimate.",
+      "look_for": "Names that imitate Windows processes, a second copy of a process that is normally unique, a process whose image name and file name differ."
+    },
+    "T1036.005": {
+      "tactics": [
+        "Defense Evasion"
+      ],
+      "summary": "Using the name or location of a trusted program (svchost.exe, lsass.exe, a system folder) for something else.",
+      "look_for": "Core Windows process names running from the wrong folder or with the wrong parent; system DLL names loaded from a user-writable folder."
+    },
+    "T1053.005": {
+      "tactics": [
+        "Execution",
+        "Persistence",
+        "Privilege Escalation"
+      ],
+      "summary": "Using scheduled tasks to run code at a time, at logon or repeatedly.",
+      "look_for": "Task actions that run from Temp/Public/Downloads, interpreters with hidden-window, bypass or download arguments, tasks created close to the time of the incident."
+    },
+    "T1055": {
+      "tactics": [
+        "Defense Evasion",
+        "Privilege Escalation"
+      ],
+      "summary": "Running code inside another process's memory: injected PE images, shellcode, manually mapped DLLs.",
+      "look_for": "Private executable memory (malfind) that starts with MZ or shellcode bytes, images mapped in a process but missing from its loader lists (ldrmodules, vadinfo vs dlllist)."
+    },
+    "T1059": {
+      "tactics": [
+        "Execution"
+      ],
+      "summary": "Using a command or script interpreter (cmd, PowerShell, wscript, mshta) to run commands.",
+      "look_for": "Interpreters started by unusual parents (Office, browsers, services) or running scripts from user-writable folders."
+    },
+    "T1059.001": {
+      "tactics": [
+        "Execution"
+      ],
+      "summary": "PowerShell used to run commands, often encoded, hidden or bypassing the execution policy.",
+      "look_for": "-EncodedCommand / -enc, -w hidden, -ep bypass, download cradles (DownloadString, IEX). Decode the command and check the parent process."
+    },
+    "T1071": {
+      "tactics": [
+        "Command and Control"
+      ],
+      "summary": "Communicating with an outside server over common application protocols (HTTP, HTTPS, DNS) so the traffic blends in.",
+      "look_for": "Connections to public addresses from processes that normally have none, or from processes already flagged for another reason; check ports, state and creation time."
+    },
+    "T1105": {
+      "tactics": [
+        "Command and Control"
+      ],
+      "summary": "Bringing a tool or payload from outside into the system (certutil, bitsadmin, PowerShell downloads).",
+      "look_for": "Command lines with URLs or -urlcache/-f http; files that appear in Temp or Downloads shortly after such a command."
+    },
+    "T1218": {
+      "tactics": [
+        "Defense Evasion"
+      ],
+      "summary": "Proxying execution through signed Windows binaries (mshta, rundll32, regsvr32, msiexec...) so a trusted program runs the payload.",
+      "look_for": "Those binaries with a remote URL, a script (.sct/.hta) or a DLL from a user-writable folder in their arguments."
+    },
+    "T1543.003": {
+      "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+      ],
+      "summary": "Creating or changing a Windows service so code starts at boot, usually as SYSTEM.",
+      "look_for": "Service ImagePath / ServiceDll outside Windows and Program Files, services running cmd or PowerShell, services missing from svcscan but present in the registry (or the reverse)."
+    },
+    "T1546.010": {
+      "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+      ],
+      "summary": "AppInit_DLLs makes Windows load a chosen DLL into every program that uses user32.dll.",
+      "look_for": "A non-empty AppInit_DLLs value with LoadAppInit_DLLs = 1; check the DLL's folder and whether it appears in many processes' module lists."
+    },
+    "T1546.012": {
+      "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+      ],
+      "summary": "Image File Execution Options 'Debugger' makes Windows start another program whenever a chosen program is launched.",
+      "look_for": "Debugger values under IFEO (sticky-keys style hijacks of accessibility tools, Task Manager replacements). Process Explorer as taskmgr.exe replacement is a known legitimate use."
+    },
+    "T1547.001": {
+      "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+      ],
+      "summary": "Run/RunOnce registry keys (and the Startup folder) start a program at every logon.",
+      "look_for": "Values pointing into Temp/Public/Downloads, encoded commands, script hosts or LOLBins; check the key's last-write time."
+    },
+    "T1547.004": {
+      "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+      ],
+      "summary": "Winlogon's Shell and Userinit values decide what starts at logon; adding a program to them runs it for every user.",
+      "look_for": "A Shell other than explorer.exe or a Userinit with more than C:\\Windows\\system32\\userinit.exe,"
+    },
+    "T1547.014": {
+      "tactics": [
+        "Persistence",
+        "Privilege Escalation"
+      ],
+      "summary": "Active Setup components run their StubPath once per user at logon, which is rarely reviewed.",
+      "look_for": "StubPath values that run from user-writable folders or through script hosts; most legitimate entries use rundll32/regsvr32 with files in System32."
+    },
+    "T1574": {
+      "tactics": [
+        "Persistence",
+        "Privilege Escalation",
+        "Defense Evasion"
+      ],
+      "summary": "Making Windows run attacker code instead of (or before) the intended code by abusing how programs find and load files.",
+      "look_for": "Modules loaded from Temp/Downloads/Public or from AppData into a process that does not live there."
+    },
+    "T1574.001": {
+      "tactics": [
+        "Persistence",
+        "Privilege Escalation",
+        "Defense Evasion"
+      ],
+      "summary": "DLL search-order hijacking: a malicious DLL with a legitimate name is found first by a program that loads it.",
+      "look_for": "System DLL names (kernel32.dll, version.dll, ...) loaded from the program's own folder or another non-system folder."
+    },
+    "T1055.012": {
+      "tactics": [
+        "Defense Evasion",
+        "Privilege Escalation"
+      ],
+      "summary": "Process hollowing: a legitimate program is started suspended, its image is replaced with other code and it is resumed, so the malicious code runs under a trusted name.",
+      "look_for": "A process whose in-memory image differs from the file on disk (headers, size, entry point), an image base that is private memory instead of a mapped file, a process started suspended by an unusual parent."
+    },
+    "T1055.013": {
+      "tactics": [
+        "Defense Evasion",
+        "Privilege Escalation"
+      ],
+      "summary": "Process doppelgänging / ghosting: code is run from a file that was modified or deleted while it was being mapped, so there is no matching file on disk to scan.",
+      "look_for": "A running process whose image file is deleted or has no name, or a section created from a transacted or delete-pending file."
+    },
+    "T1562.006": {
+      "tactics": [
+        "Defense Evasion"
+      ],
+      "summary": "Indicator blocking: logging or telemetry is switched off or patched so that the activity is not recorded (for example the ETW event-writing function patched to return at once).",
+      "look_for": "ETW functions in ntdll with a different first instruction than the file on disk, disabled trace sessions, audit policy changes just before suspicious activity."
+    }
+  }
+}
