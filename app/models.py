@@ -380,9 +380,40 @@ def save_analysis_result(result: AnalysisResult, file_path: str) -> str:
     return file_path
 
 
+MEMORY_IMAGE_EXTENSIONS = (".raw", ".mem", ".dmp", ".vmem", ".lime", ".bin", ".img", ".aff4", ".vmsn", ".vmss", ".core", ".elf")
+
+
+class NotAnInvestigationFile(ValueError):
+    """The file is not a saved investigation (``memory_image`` is True when it looks like a memory image instead)."""
+
+    def __init__(self, message: str, memory_image: bool = False):
+        super().__init__(message)
+        self.memory_image = memory_image
+
+
+def sniff_investigation_file(file_path: str) -> None:
+    """Look at the first bytes only, so a multi-gigabyte memory image chosen by mistake is rejected at once instead of being read whole.
+    Raises :class:`NotAnInvestigationFile`; returns None for a file that can be a saved investigation (gzip, or JSON text starting with ``{``)."""
+    with open(file_path, "rb") as handle:
+        head = handle.read(4096)
+    if head[:2] == b"\x1f\x8b":                                  # gzip (.json.gz)
+        return
+    text = head.lstrip(b"\xef\xbb\xbf \t\r\n")
+    if text[:1] == b"{":
+        return
+    size = os.path.getsize(file_path)
+    image = file_path.lower().endswith(MEMORY_IMAGE_EXTENSIONS) or (size >= 1024 * 1024 and b"\x00" in head)
+    if image:
+        raise NotAnInvestigationFile(
+            "This is a memory image, not a saved investigation. Use 'Run analysis' to analyse it; 'Load existing' opens the .json / .json.gz "
+            "files MemoryGraph saves after an analysis.", memory_image=True)
+    raise NotAnInvestigationFile("The file is not a MemoryGraph investigation (a .json or .json.gz file saved by MemoryGraph).")
+
+
 def load_analysis_result(file_path: str) -> AnalysisResult:
     if not os.path.isfile(file_path):
         raise FileNotFoundError(f"File not found: {file_path}")
+    sniff_investigation_file(file_path)
     try:
         if file_path.lower().endswith(".gz"):
             with gzip.open(file_path, "rt", encoding="utf-8") as handle:

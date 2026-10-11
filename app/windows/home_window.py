@@ -22,7 +22,7 @@ from app.analysis.controller import AnalysisController
 from app.analysis.dump import validate_dump
 from app.errors import MemoryGraphError, safe_slot, short_message
 from app.logging_setup import get_logger
-from app.models import save_analysis_result
+from app.models import NotAnInvestigationFile, save_analysis_result, sniff_investigation_file
 from app.engines import OS_IDS, engine_for_settings, get_engine
 from app.settings import load_settings, remember_recent, save_settings, switch_target_os
 from app.tasks import BackgroundTask
@@ -500,6 +500,23 @@ class HomeWindow(QMainWindow):
     def load_analysis_file(self, file_name: str) -> None:
         if self.controller.is_running:
             show_info(self, "Busy", "Another task is running. Wait until it finishes.")
+            return
+        try:
+            sniff_investigation_file(file_name)
+        except NotAnInvestigationFile as exc:
+            if exc.memory_image:
+                answer = QMessageBox.question(
+                    self, "This is a memory image",
+                    f"{os.path.basename(file_name)} is a memory image, not a saved investigation.\n\n"
+                    "'Load existing' opens the .json / .json.gz files MemoryGraph saves after an analysis.\n\nAnalyse this memory image now?")
+                if answer == QMessageBox.StandardButton.Yes:
+                    self.path.setText(file_name)
+                    self.run_analysis()
+            else:
+                show_error(self, "Load Existing Investigation", str(exc))
+            return
+        except OSError as exc:
+            show_error(self, "Load Existing Investigation", f"The file cannot be read:\n{file_name}\n\n{exc}")
             return
         self._mode = "loading"
         self._last_request = ("load", file_name)
