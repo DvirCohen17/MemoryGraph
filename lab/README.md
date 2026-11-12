@@ -100,14 +100,44 @@ three Windows versions, or start with `guests = ["win10"]`.
 
 ## Making dumps
 
+**One command for the whole set** (from `orchestrator\`): `run-all.ps1` chains check -> fetch -> baseline ->
+run, and publishes each dump to GitHub as it finishes.
+
+```powershell
+$env:MALWAREBAZAAR_AUTH_KEY = "....your key...."   # once per PowerShell window
+.\run-all.ps1                                      # everything, every guest, every family
+.\run-all.ps1 -Guest win10 -Family AgentTesla      # just one
+.\run-all.ps1 -Seconds 300 -Again                  # run longer, re-capture ones already done
 ```
-python labctl.py probe                         # samples per family on MalwareBazaar (fix signature names in families.toml)
-python labctl.py fetch                         # 1 sample per family (bazaar.per_family) into the cache
-python labctl.py baseline                      # one clean dump per guest
-python labctl.py run --guest win10 --limit 1   # try one first
-python labctl.py run                           # every cached sample on every guest its family lists
-python labctl.py get win10-agenttesla-3f9a1c2e-20261112-1530 --dest D:\dumps
+
+Or the individual steps:
+
 ```
+py -3.11 labctl.py probe                          # samples per family on MalwareBazaar (fix signature names in families.toml)
+py -3.11 labctl.py fetch                           # 1 sample per family (bazaar.per_family) into the cache
+py -3.11 labctl.py baseline                        # one clean dump per guest
+py -3.11 labctl.py run --guest win10 --limit 1     # try one first
+py -3.11 labctl.py run                             # every cached sample on every guest its family lists
+py -3.11 labctl.py get win10-agenttesla-3f9a1c2e-20261112-1530 --dest C:\malware-lab\dumps
+```
+
+## Taking the whole set to an offline machine
+
+The dumps live on GitHub; the big images are encrypted 7z release assets, never in the git tree. To analyse
+them air-gapped, mirror everything onto a USB drive on an online machine, then unpack on the offline one:
+
+```powershell
+# ONLINE (from orchestrator\):
+.\grab-all.ps1 -Dest E:\lab-export          # clones the text repo + downloads every encrypted dump
+
+# ...copy E:\lab-export to the offline machine, then OFFLINE:
+.\unpack-offline.ps1 -Source E:\lab-export  # extracts each <id>\memory.vmem next to its answer key
+```
+
+**Offline symbols:** Volatility needs the Win10 kernel symbol file to read these images, and MemoryGraph runs
+it with `--offline`. All dumps from the same template share one build, so you only need the file once. On an
+online machine run Volatility on any one image (`windows.info` then `windows.netscan`), then copy the resulting
+`...\volatility3\symbols\windows\` folder to the same place on the offline machine.
 
 `run` options: `--family X` (repeatable), `--guest win10`, `--seconds 300` (longer run before the capture),
 `--no-upload` (keep the package locally), `--again` (repeat samples already captured on that guest).
