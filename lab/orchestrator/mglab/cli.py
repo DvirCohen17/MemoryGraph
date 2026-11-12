@@ -148,30 +148,45 @@ def cmd_baseline(cfg, args) -> int:
 def cmd_run(cfg, args) -> int:
     cache = SampleCache(cfg.cache_dir)
     families = _families(args)
-    failures = 0
-    done = 0
+    per_family = args.per_family or cfg.per_family
+
+    # Build the ordered worklist first, so we know how many captures there are and can number them.
+    # Each one is done strictly one at a time: revert -> detonate -> capture -> revert -> publish -> next.
+    worklist = []
+    skipped = []
     for guest in _guests(cfg, args):
         for family in families:
             if guest.name not in family.guests:
                 continue
-            for sample in cache.samples(family.name)[: (args.per_family or cfg.per_family)]:
+            for sample in cache.samples(family.name)[:per_family]:
                 previous = cache.already_run(sample.sha256, guest.name)
                 if previous and not args.again:
-                    print(f"skip {family.name} {sample.sha256[:12]} on {guest.name}: already captured as {previous} (--again to repeat)")
-                    continue
-                if args.limit and done >= args.limit:
-                    return 1 if failures else 0
-                try:
-                    pkg = run_capture(cfg, _vm(cfg), guest, cache, family, sample, seconds=args.seconds,
-                                      allow_unsafe=args.i_know_it_is_not_isolated)
-                    _finish(cfg, pkg, guest.name, args)
-                    done += 1
-                except SafetyError:
-                    raise
-                except (DetonationError, VmrunError, StorageError, OSError) as exc:
-                    failures += 1
-                    print(f"FAILED {family.name} {sample.sha256[:12]} on {guest.name}: {exc}", file=sys.stderr)
-    print(f"{done} dump(s) made, {failures} failed.")
+                    skipped.append((family, sample, guest, previous))
+                else:
+                    worklist.append((guest, family, sample))
+    if args.limit:
+        worklist = worklist[: args.limit]
+
+    for family, sample, guest, previous in skipped:
+        print(f"skip {family.name} {sample.sha256[:12]} on {guest.name}: already captured as {previous} (--again to repeat)")
+    total = len(worklist)
+    print(f"{total} capture(s) to run" + (f" ({len(skipped)} skipped)" if skipped else "") + ".")
+
+    failures = 0
+    done = 0
+    for i, (guest, family, sample) in enumerate(worklist, 1):
+        print(f"\n===== Sample {i} of {total}: {family.name} {sample.sha256[:12]} on {guest.name} =====")
+        try:
+            pkg = run_capture(cfg, _vm(cfg), guest, cache, family, sample, seconds=args.seconds,
+                              allow_unsafe=args.i_know_it_is_not_isolated)
+            _finish(cfg, pkg, guest.name, args)
+            done += 1
+        except SafetyError:
+            raise
+        except (DetonationError, VmrunError, StorageError, OSError) as exc:
+            failures += 1
+            print(f"FAILED {family.name} {sample.sha256[:12]} on {guest.name}: {exc}", file=sys.stderr)
+    print(f"\n{done} of {total} dump(s) made, {failures} failed.")
     return 1 if failures else 0
 
 
