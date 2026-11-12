@@ -1,0 +1,44 @@
+# Copy to lab.toml and adjust the paths. Paths in single quotes: no need to double the backslashes.
+
+[vmware]
+vmrun = 'C:\Program Files (x86)\VMware\VMware Workstation\vmrun.exe'
+lab_vnet = "VMnet9"            # the isolated network the victims must be on (checked before every run)
+
+[guest_account]                 # same as in the Packer answer files
+user = "analyst"
+password = "Lab!Passw0rd"
+
+# One section per victim VM made by Terraform (`terraform output victims`).
+[guests.win10]
+vmx = 'D:\malware-lab\vms\victim-win10\victim-win10.vmx'
+snapshot = "ready"
+
+[guests.win11]
+vmx = 'D:\malware-lab\vms\victim-win11\victim-win11.vmx'
+snapshot = "ready"
+
+[guests.win7]
+vmx = 'D:\malware-lab\vms\victim-win7\victim-win7.vmx'
+snapshot = "ready"
+
+[run]
+seconds = 180                   # how long the sample runs before the capture
+work_dir = 'D:\malware-lab\work'      # dumps are packed here before upload (needs ~2x guest RAM free)
+cache_dir = 'D:\malware-lab\samples'  # downloaded samples, still in MalwareBazaar's password-protected zip
+drop_dir = ""                   # where the sample is saved in the guest; empty = the user's Downloads folder
+boot_timeout = 600
+
+[bazaar]
+auth_key_env = "MALWAREBAZAAR_AUTH_KEY"   # name of the environment variable holding your Auth-Key
+per_family = 1                  # how many samples of each family to fetch and run
+max_size_mb = 20
+
+[storage]
+mode = "github"                 # github = upload and keep only text locally; local = keep packages in work_dir
+repo = "DvirCohen17/memorygraph-dumps"         # a separate PRIVATE repository for the dumps
+repo_dir = 'D:\malware-lab\memorygraph-dumps'   # your local clone of it (holds only the small text files)
+seven_zip = 'C:\Program Files\7-Zip\7z.exe'
+gh = "gh"
+archive_password = "infected"   # the usual password for malware archives
+volume_size = "1900m"           # GitHub release files must be under 2 GiB
+keep_local = false              # delete the local package after a successful upload

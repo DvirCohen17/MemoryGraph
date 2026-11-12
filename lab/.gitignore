@@ -1,0 +1,23 @@
+# Never commit samples, dumps, VMs or secrets.
+*.zip
+*.7z
+*.7z.*
+*.vmem
+*.vmss
+*.vmsn
+*.vmdk
+*.raw
+*.mem
+*.dmp
+*.iso
+*.msi
+*.exe
+orchestrator/lab.toml
+terraform/terraform.tfvars
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.*
+terraform/.terraform.lock.hcl
+packer/output-*/
+packer/packer_cache/
+__pycache__/

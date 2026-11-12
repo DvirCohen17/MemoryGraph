@@ -1,0 +1,189 @@
+# Curated Windows malware families for the lab. `signature` is MalwareBazaar's family name
+# (check them with: python labctl.py probe). `guests` = which lab VMs the family is run on.
+# `description` and `look_for` go into each dump's README.md; `look_for` is what an analyst
+# (and MemoryGraph) should be able to see in memory. Edit freely.
+#
+# file_types: "exe" samples are started through Explorer (like a double-click);
+# "dll" samples with rundll32 <file>,<export>.
+
+[[family]]
+name = "AgentTesla"
+signature = "AgentTesla"
+guests = ["win10", "win11", "win7"]
+file_types = ["exe"]
+description = "A .NET information stealer and keylogger sold since 2014. It steals saved passwords from browsers, e-mail and FTP clients, logs keystrokes and takes screenshots, and sends them out by SMTP, FTP, HTTP or Telegram."
+look_for = [
+  "The sample process started by explorer.exe from the Downloads folder, or a hollowed .NET host such as RegAsm.exe, InstallUtil.exe, MSBuild.exe or AppLaunch.exe",
+  "Private executable (RWX) memory in that process (malfind)",
+  "Outgoing SMTP (25/587) or HTTP(S) connections to the fake internet",
+  "A copy of itself under %APPDATA% and a Run key or scheduled task (not always)",
+]
+
+[[family]]
+name = "AsyncRAT"
+signature = "AsyncRAT"
+guests = ["win10", "win11"]
+file_types = ["exe"]
+description = "An open-source .NET remote access trojan. It connects to its server over TLS, can run commands, steal data and load plugins in memory. Many builds check for virtual machines and quit."
+look_for = [
+  "The sample process (often copied to %APPDATA% or %TEMP%) with a long-lived TCP connection or connection attempts to its C2 port",
+  "Persistence through a Run key or a scheduled task started by schtasks.exe",
+  "Command lines with schtasks /create or cmd /c timeout",
+]
+
+[[family]]
+name = "RemcosRAT"
+signature = "RemcosRAT"
+guests = ["win10", "win11", "win7"]
+file_types = ["exe"]
+description = "Remcos (\"Remote Control & Surveillance\") is a commercial C++ remote access tool widely abused as a RAT: keylogging, screen and microphone capture, remote shell. Its configuration is stored RC4-encrypted in a resource named SETTINGS."
+look_for = [
+  "A mutex named like Rmc-XXXXXX (windows.mutantscan / handles)",
+  "A Run key under HKCU\\Software\\Microsoft\\Windows\\CurrentVersion\\Run",
+  "A keylog file under %APPDATA% (filescan) and a TCP connection to the C2",
+  "Injection into a Windows process in some builds (malfind)",
+]
+
+[[family]]
+name = "RedLineStealer"
+signature = "RedLineStealer"
+guests = ["win10", "win11"]
+file_types = ["exe"]
+description = "A .NET information stealer sold as a service since 2020. It collects browser passwords, cookies, credit cards, crypto wallets and system details and sends them to its panel over WCF (net.tcp/SOAP). It usually runs once and has no persistence."
+look_for = [
+  "A short-lived sample process, possibly already exited (psscan with an exit time)",
+  "A connection attempt to the panel's TCP port",
+  "Handles to browser profile files (Login Data, Cookies, Web Data)",
+]
+
+[[family]]
+name = "Formbook"
+signature = "Formbook"
+guests = ["win10", "win11", "win7"]
+file_types = ["exe"]
+description = "A C information stealer and form grabber (XLoader is its successor). It hollows a Windows program, injects into explorer.exe and then into a randomly chosen Windows binary, and hides its HTTP C2 among many decoy domains."
+look_for = [
+  "Injected code (RWX private memory) in explorer.exe and in a Windows binary started from System32 or SysWOW64",
+  "A Windows process with an unusual parent or command line (process hollowing)",
+  "HTTP requests to many different domains (the decoys) answered by the fake internet",
+]
+
+[[family]]
+name = "QuasarRAT"
+signature = "QuasarRAT"
+guests = ["win10", "win11", "win7"]
+file_types = ["exe"]
+description = "An open-source .NET remote administration tool used as a RAT by several groups. It copies itself (by default to %APPDATA%\\SubDir\\Client.exe), adds persistence and connects to its server over TLS."
+look_for = [
+  "Client.exe (or the configured name) under %APPDATA%",
+  "A scheduled task or Run key pointing to it",
+  "A TCP connection or connection attempts to the C2 port",
+]
+
+[[family]]
+name = "LummaStealer"
+signature = "LummaStealer"
+guests = ["win10", "win11"]
+file_types = ["exe"]
+description = "A C information stealer sold as a service since 2022. It steals browser data and crypto wallets and posts them to its C2 over HTTPS. It is often delivered by loaders and checks its environment."
+look_for = [
+  "A short-lived sample process and HTTPS (443) connections to the fake internet",
+  "Handles to browser profile and wallet files",
+]
+
+[[family]]
+name = "XWorm"
+signature = "XWorm"
+guests = ["win10", "win11"]
+file_types = ["exe"]
+description = "A .NET RAT and stealer: remote control, keylogging, DDoS and ransomware plugins, spreading over USB. It reports new victims through Telegram and persists in several ways."
+look_for = [
+  "Persistence through a Run key, the Startup folder and/or a scheduled task",
+  "A copy of the sample under %APPDATA% or %TEMP%",
+  "A TCP connection to the C2 and HTTPS to api.telegram.org (answered by the fake internet)",
+]
+
+[[family]]
+name = "njRAT"
+signature = "njrat"
+guests = ["win10", "win11", "win7"]
+file_types = ["exe"]
+description = "njRAT (Bladabindi), a .NET remote access trojan from 2013 still widely used. It adds itself to the firewall's allowed programs with netsh, persists with a Run key and logs keystrokes."
+look_for = [
+  "A child process netsh.exe firewall add allowedprogram ... (command line)",
+  "A Run key and a copy of the sample in %TEMP% or %APPDATA%",
+  "A TCP connection to the C2 port",
+]
+
+[[family]]
+name = "SnakeKeylogger"
+signature = "SnakeKeylogger"
+guests = ["win10", "win11", "win7"]
+file_types = ["exe"]
+description = "A .NET keylogger and credential stealer (also called 404 Keylogger). It sends stolen data by SMTP, FTP or Telegram and often runs inside a hollowed .NET process."
+look_for = [
+  "A hollowed .NET host process or the sample itself with RWX private memory",
+  "SMTP or HTTP connections to the fake internet",
+  "A lookup of the public IP address (HTTP to checkip.dyndns.org or similar)",
+]
+
+[[family]]
+name = "DCRat"
+signature = "DCRat"
+guests = ["win10", "win11"]
+file_types = ["exe"]
+description = "DarkCrystal RAT, a cheap modular .NET remote access trojan. It drops copies of itself with names of Windows programs and creates scheduled tasks for them."
+look_for = [
+  "Copies of the sample under Windows-looking names in unusual folders",
+  "Several scheduled tasks (schtasks.exe child processes)",
+  "HTTP connections to the C2 (PHP gate)",
+]
+
+[[family]]
+name = "NanoCore"
+signature = "NanoCore"
+guests = ["win7", "win10"]
+file_types = ["exe"]
+description = "An older .NET remote access trojan (2013-2017) with plugins for surveillance and remote control. It copies itself into a GUID-named folder under %APPDATA% and persists with a scheduled task."
+look_for = [
+  "A process from %APPDATA%\\<GUID>\\ with a scheduled task created by schtasks.exe",
+  "A TCP connection to the C2 port",
+]
+
+[[family]]
+name = "Emotet"
+signature = "Heodo"
+guests = ["win10", "win7"]
+file_types = ["dll"]
+dll_export = "DllRegisterServer"
+description = "Emotet (MalwareBazaar name: Heodo), a loader that started as a banking trojan and delivered other malware for years. Recent samples are DLLs started with rundll32 or regsvr32 that copy themselves to a random folder under %LOCALAPPDATA% and create a service or Run key."
+look_for = [
+  "rundll32.exe running a DLL from %LOCALAPPDATA% with a random name",
+  "HTTP or HTTPS connections to several C2 addresses",
+  "A Run key or service pointing to the copied DLL",
+]
+
+[[family]]
+name = "QakBot"
+signature = "QakBot"
+guests = ["win10", "win7"]
+file_types = ["dll"]
+dll_export = "DllRegisterServer"
+description = "QakBot (QBot), a banking trojan turned loader that injected into Windows processes such as wermgr.exe or explorer.exe. Its infrastructure was taken down in 2023, so samples may stay quiet without their servers."
+look_for = [
+  "Injected code in wermgr.exe, explorer.exe or another Windows process (malfind)",
+  "The DLL started with rundll32.exe from a user folder",
+]
+
+[[family]]
+name = "Dridex"
+signature = "Dridex"
+guests = ["win7"]
+file_types = ["dll", "exe"]
+dll_export = "DllRegisterServer"
+description = "Dridex, the banking trojan that grew out of Cridex/Bugat (the classic cridex.vmem practice image). It hides in DLLs loaded by legitimate Windows programs (DLL search-order hijacking) and injects into browsers to steal banking logins."
+look_for = [
+  "A legitimate Windows program started from an unusual folder that loads a DLL from the same folder",
+  "Injected code in explorer.exe or a browser (malfind)",
+  "HTTPS connections to the C2",
+]

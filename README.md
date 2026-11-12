@@ -217,6 +217,7 @@ app/
   settings.py  paths.py  logging_setup.py  tasks.py  theme.py  util.py
 tools/volatility2/  drop-in folder for Volatility 2 (optional; the 2.6 standalone is included)
 tools/realworld/    the testing report: run on real memory images, offline (see its README)
+lab/                malware memory-dump lab: VMware Workstation + MalwareBazaar samples -> dumps with answer keys (see its README)
 tests/  docs/
 ```
 
@@ -226,3 +227,7 @@ tests/  docs/
 (Markdown, a self-contained HTML page and JSON) **on a computer with no internet**: `run_report.bat --check`, then `run_report.bat --dump image.raw`. `--simulate` runs synthetic
 malware-shaped scenarios through the rules without any image. See `tools/realworld/README.md`. The results of the first runs, the bugs they found and a score per category are in
 `docs/REALWORLD_REPORT.md`.
+
+Practice images with known malware come from `lab/` (see `lab/README.md`): Packer and Terraform build isolated Windows 7/10/11 VMs in VMware Workstation,
+`lab/orchestrator/labctl.py` runs MalwareBazaar samples in them, captures `memory.vmem` and writes an `expected.json` answer key for `run_report --expected`;
+the dumps are kept as encrypted GitHub release files in a separate private repository.

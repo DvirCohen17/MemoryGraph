@@ -1,0 +1,6 @@
+# Copy to terraform.tfvars and adjust.
+guests         = ["win7", "win10", "win11"]
+templates_root = "D:/malware-lab/templates"
+vms_root       = "D:/malware-lab/vms"
+lab_vnet       = "VMnet9"
+# gateway_vmx  = "D:/malware-lab/gateway/remnux/remnux.vmx"
