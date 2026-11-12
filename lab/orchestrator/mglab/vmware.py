@@ -21,7 +21,7 @@ Runner = Callable[[Sequence[str], float], Tuple[int, str]]
 
 
 def _default_runner(args: Sequence[str], timeout: float) -> Tuple[int, str]:
-    proc = subprocess.run(list(args), capture_output=True, text=True, timeout=timeout)
+    proc = subprocess.run(list(args), capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=timeout)
     return proc.returncode, (proc.stdout or "") + (proc.stderr or "")
 
 

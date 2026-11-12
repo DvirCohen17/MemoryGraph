@@ -25,7 +25,7 @@ class StorageError(Exception):
 
 
 def _default_runner(args: Sequence[str], timeout: float, cwd: str = "") -> Tuple[int, str]:
-    proc = subprocess.run(list(args), capture_output=True, text=True, timeout=timeout, cwd=cwd or None)
+    proc = subprocess.run(list(args), capture_output=True, text=True, encoding="utf-8", errors="replace", timeout=timeout, cwd=cwd or None)
     return proc.returncode, (proc.stdout or "") + (proc.stderr or "")
 
 
