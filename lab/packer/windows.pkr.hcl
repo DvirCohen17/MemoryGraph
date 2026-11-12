@@ -132,6 +132,7 @@ source "vmware-iso" "windows" {
   winrm_password = var.guest_password
   winrm_timeout  = "3h" # Windows setup + updates offered by setup can take a while
 
+  tools_mode          = "upload" # required by the VMware plugin v2
   tools_upload_flavor = var.tools_iso == "" ? "windows" : null
   tools_source_path   = var.tools_iso == "" ? null : var.tools_iso
   tools_upload_path   = "C:/Windows/Temp/vmtools.iso"
@@ -153,9 +154,6 @@ source "vmware-iso" "windows" {
     "isolation.tools.hgfs.disable"        = "TRUE"
     "sharedFolder.maxNum"                 = "0"
     "usb.present"                         = "FALSE"
-    "sound.present"                       = "FALSE"
-    "serial0.present"                     = "FALSE"
-    "parallel0.present"                   = "FALSE"
   }
 
   vmx_data_post = {
