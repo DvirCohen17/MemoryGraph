@@ -25,6 +25,17 @@ from .vmware import SafetyError, Vmrun, VmrunError, check_isolation, check_memor
 HERE = Path(__file__).resolve().parent.parent
 
 
+def _guest_ram_gib(vmx) -> float:
+    """Guest RAM in GiB, read from the .vmx (memsize is in MB). Defaults to 4 GiB if it can't be read."""
+    try:
+        for line in Path(vmx).read_text(errors="ignore").splitlines():
+            if line.strip().lower().startswith("memsize"):
+                return int(line.split('"')[1]) / 1024.0
+    except Exception:  # noqa: BLE001
+        pass
+    return 4.0
+
+
 def _families(args):
     families = load_families(Path(args.families))
     if args.family:
@@ -67,7 +78,11 @@ def cmd_check(cfg, args) -> int:
     except ConfigError as exc:
         report(False, str(exc))
     free = shutil.disk_usage(Path(cfg.work_dir).anchor or ".").free
-    report(free > 20 * 2**30, f"free space for {cfg.work_dir}: {free / 2**30:.0f} GiB (a package needs about 2x guest RAM)")
+    rams = [_guest_ram_gib(g.vmx) for g in cfg.guests.values() if Path(g.vmx).is_file()]
+    max_ram = max(rams) if rams else 4.0
+    need = 2 * max_ram + 2        # the image (~RAM) is copied beside the suspend file, then packed
+    report(free > need * 2**30, f"free space for {cfg.work_dir}: {free / 2**30:.0f} GiB "
+           f"(need ~{need:.0f} GiB: about 2x the {max_ram:.0f} GiB guest RAM, plus packing headroom)")
     if cfg.storage_mode == "github":
         print("GitHub")
         storage = Storage(cfg)
