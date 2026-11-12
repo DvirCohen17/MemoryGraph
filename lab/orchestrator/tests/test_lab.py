@@ -176,9 +176,11 @@ TRUTH = {
         {"pid": 4200, "ppid": 4100, "name": "powershell.exe", "created_utc": "2026-11-12T15:00:05Z"},   # child of the sample: counts
         {"pid": 4300, "ppid": 4100, "name": "RegAsm.exe", "created_utc": "2026-11-12T15:00:06Z"},
         {"pid": 5000, "ppid": 700, "name": "AppLaunch.exe", "created_utc": "2026-11-12T15:01:00Z"},     # new after launch, unrelated parent
-        {"pid": 900, "ppid": 800, "name": "powershell.exe", "created_utc": "2026-11-12T15:03:00Z"},     # the collector
+        {"pid": 900, "ppid": 1576, "name": "powershell.exe", "created_utc": "2026-11-12T15:03:00Z"},    # the collector
         {"pid": 901, "ppid": 900, "name": "netstat.exe", "created_utc": "2026-11-12T15:03:01Z"},
         {"pid": 950, "ppid": 700, "name": "WmiPrvSE.exe", "created_utc": "2026-11-12T15:03:00Z"},       # lab noise
+        {"pid": 5044, "ppid": 700, "name": "vmtoolsd.exe", "created_utc": "2026-11-12T14:00:00Z"},
+        {"pid": 1576, "ppid": 5044, "name": "cmd.exe", "created_utc": "2026-11-12T15:02:59Z"},          # lab's cmd /c wrapper
         {"pid": 960, "ppid": 960, "name": "svchost.exe", "created_utc": "2026-11-12T14:00:00Z"},
     ],
     "connections": [
@@ -214,6 +216,12 @@ class PackageTests(unittest.TestCase):
             self.assertIn("id", fact)
             self.assertIn("description", fact)
         self.assertEqual(set(exp["findings_review"]), {"true_positive", "false_positive", "inconclusive"})
+
+    def test_parent_that_exited_is_named(self):
+        truth = {"processes": [{"pid": 8288, "ppid": 2244, "name": "MSBuild.exe", "created_utc": "2026-11-12T15:00:09Z"}],
+                 "connections": []}
+        exp = package.build_expected("id1", FAMILY, SAMPLE, truth, {"pids": [2244], "launched_utc": LAUNCH}, 5)
+        self.assertIn("started by the sample itself (PID 2244", exp["facts"][0]["description"])
 
     def test_nothing_running(self):
         exp = package.build_expected("id1", FAMILY, SAMPLE, {"processes": [], "connections": []}, {"pids": []}, 5)

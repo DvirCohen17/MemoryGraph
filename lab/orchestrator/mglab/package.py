@@ -60,6 +60,16 @@ def sample_processes(truth: dict, detonation: dict) -> List[dict]:
     collector_tree = set()
     if collector is not None:
         collector_tree.add(collector)
+        # ...and the cmd.exe the lab started it from (and anything else VMware Tools started for the lab).
+        parent = by_pid.get(by_pid.get(collector, {}).get("ppid"))
+        while parent is not None and parent["name"].lower() != "vmtoolsd.exe" and parent["pid"] not in collector_tree:
+            collector_tree.add(parent["pid"])
+            parent = by_pid.get(parent["ppid"])
+    for p in processes:
+        guest_op = by_pid.get(p["ppid"], {}).get("name", "").lower() == "vmtoolsd.exe"
+        if guest_op and p["name"].lower() in ("cmd.exe", "powershell.exe", "conhost.exe"):
+            collector_tree.add(p["pid"])
+    if collector_tree:
         changed = True
         while changed:
             changed = False
@@ -113,11 +123,17 @@ def build_expected(package_id: str, family, sample, truth: dict, detonation: dic
     source = (f"lab ground truth: process list taken inside the VM {seconds_before_capture:.0f} s before the memory capture "
               f"(collect.ps1, Win32_Process)")
     facts = []
+    sample_pids = set(detonation.get("pids") or [])
     for i, p in enumerate(procs, 1):
         parent = by_pid.get(p["ppid"])
+        if parent:
+            origin = f", started by {parent['name']} (PID {parent['pid']})"
+        elif p["ppid"] in sample_pids:
+            origin = f", started by the sample itself (PID {p['ppid']}, which had exited by capture time)"
+        else:
+            origin = f", parent PID {p['ppid']} no longer running"
         facts.append({"id": f"S-P{i}", "type": "process", "name": p["name"], "pid": p["pid"], "ppid": p["ppid"],
-                      "description": f"{p['name']} (PID {p['pid']}) ran as part of the sample"
-                                     + (f", started by {parent['name']} (PID {parent['pid']})" if parent else ""),
+                      "description": f"{p['name']} (PID {p['pid']}) ran as part of the sample" + origin,
                       "verified": True, "source": source})
         if parent:
             facts.append({"id": f"S-R{i}", "type": "parent", "name": p["name"], "pid": p["pid"], "parent_name": parent["name"],
@@ -207,9 +223,11 @@ def build_readme(meta: dict, expected: dict, truth: dict, family=None) -> str:
     else:
         parts += ["Nothing malicious. Findings MemoryGraph shows here are its false-positive baseline for this guest.", ""]
     parts += ["`expected.json` is the machine-readable answer key (format: `tools/realworld/README.md` in MemoryGraph).", ""]
-    parts += ["## How to use it", "", "```",
+    parts += ["## How to use it", "", "From `lab/orchestrator` in MemoryGraph (downloads and unpacks):", "", "```",
+              f"py -3.11 labctl.py get {pid} --dest C:\\malware-lab\\dumps",
+              "```", "", "Or by hand:", "", "```",
               f"gh release download {pid} --repo {meta.get('repo') or '<owner>/<repo>'} --dir {pid}",
-              f"7z x {pid}\\{pid}.7z.001 -pinfected -o{pid}",
+              f"& \"C:\\Program Files\\7-Zip\\7z.exe\" x {pid}\\{pid}.7z.001 -pinfected -o{pid}",
               "```", "",
               f"Then in MemoryGraph: *Run analysis* on `{pid}\\memory.vmem` (keep `memory.vmss` next to it). To score MemoryGraph:",
               "", "```", f"tools\\realworld\\run_report.bat --dump {pid}\\memory.vmem --expected {pid}\\expected.json", "```", "",
