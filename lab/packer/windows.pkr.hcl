@@ -7,7 +7,9 @@ packer {
   required_plugins {
     vmware = {
       source  = "github.com/hashicorp/vmware"
-      version = ">= 1.0.0"
+      # v1.0.x still supports VMware Workstation 17.0; plugin v2 requires Workstation 17.6+.
+      # With Workstation 17.6+ you can move to ">= 2.0.0" (then add tools_mode = "upload").
+      version = ">= 1.0.11, < 1.1.0"
     }
   }
 }
@@ -111,7 +113,6 @@ source "vmware-iso" "windows" {
   iso_checksum     = var.iso_checksum
   guest_os_type    = var.guest_os_type
   version          = 19
-  firmware         = var.firmware
   cpus             = var.cpus
   memory           = var.memory_mb
   disk_size        = var.disk_mb
@@ -132,16 +133,15 @@ source "vmware-iso" "windows" {
   winrm_password = var.guest_password
   winrm_timeout  = "3h" # Windows setup + updates offered by setup can take a while
 
-  tools_mode          = "upload" # required by the VMware plugin v2
-  tools_upload_flavor = var.tools_iso == "" ? "windows" : null
-  tools_source_path   = var.tools_iso == "" ? null : var.tools_iso
+  tools_upload_flavor = "windows"
+  tools_source_path   = var.tools_iso == "" ? null : var.tools_iso # empty = Workstation's own Tools ISO
   tools_upload_path   = "C:/Windows/Temp/vmtools.iso"
 
   shutdown_command = "shutdown /s /t 10 /f /d p:4:1 /c \"Packer shutdown\""
   shutdown_timeout = "30m"
   skip_compaction  = false
 
-  vmx_data = {
+  vmx_data = merge(var.firmware == "efi" ? { "firmware" = "efi" } : {}, {
     # Memory: keep the whole guest RAM in one .vmem file so a suspend gives a complete, consistent dump.
     "mainMem.useNamedFile"      = "TRUE"
     "MemTrimRate"               = "0"
@@ -154,7 +154,7 @@ source "vmware-iso" "windows" {
     "isolation.tools.hgfs.disable"        = "TRUE"
     "sharedFolder.maxNum"                 = "0"
     "usb.present"                         = "FALSE"
-  }
+  })
 
   vmx_data_post = {
     # From now on the VM only sees the isolated lab network (never NAT or bridged).
