@@ -204,6 +204,19 @@ class PackageTests(unittest.TestCase):
     def test_connections(self):
         conns = package.sample_connections(TRUTH, [4100, 4200, 4300])
         self.assertEqual([(c["remote_address"], c["remote_port"], c["pid"]) for c in conns], [("10.66.0.1", 587, 4300)])
+        self.assertTrue(conns[0]["attributed"])
+
+    def test_closed_connection_is_recorded_unattributed(self):
+        # A beacon that died before capture: TIME_WAIT, Windows reports owner PID 0. On the isolated lab
+        # net it must still be recorded (as the sample's C2), while a *live* socket owned by another PID
+        # (OS noise) is dropped.
+        truth = {"connections": [
+            {"proto": "TCP", "local": "10.66.0.10:63442", "remote": "10.66.0.1:443", "state": "TIME_WAIT", "pid": 0},
+            {"proto": "TCP", "local": "10.66.0.10:63443", "remote": "93.184.216.34:80", "state": "ESTABLISHED", "pid": 988},
+        ]}
+        conns = package.sample_connections(truth, [3688])
+        self.assertEqual([(c["remote_address"], c["remote_port"], c["attributed"]) for c in conns],
+                         [("10.66.0.1", 443, False)])
 
     def test_expected_matches_harness_format(self):
         exp = package.build_expected("id1", FAMILY, SAMPLE, TRUTH, DETONATION, 8)

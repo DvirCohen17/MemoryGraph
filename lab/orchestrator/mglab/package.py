@@ -100,21 +100,29 @@ def sample_processes(truth: dict, detonation: dict) -> List[dict]:
 
 
 def sample_connections(truth: dict, pids: Iterable[int]) -> List[dict]:
+    """Remote connections attributable to the sample. A socket caught while still open carries its
+    owning PID, and we take it when that PID is in the sample's process set. A socket that had already
+    closed by capture shows up in TIME_WAIT with PID 0 (Windows reports no owner); on the isolated lab
+    network a remote connection can only reach the fake-internet gateway, so we still record it, marked
+    closed (unattributed). A live socket owned by some *other* PID is OS background noise and is dropped.
+    One row per protocol+endpoint, preferring an attributed row over a closed one."""
     pids = set(pids)
-    out, seen = [], set()
+    best = {}
     for c in truth.get("connections") or []:
-        if c.get("pid") not in pids:
-            continue
         address, port = _split_endpoint(c.get("remote", ""))
         if not _is_remote(address) or not port:
             continue
-        key = (address, port, c.get("pid"))
-        if key in seen:
+        pid = c.get("pid")
+        attributed = pid in pids
+        closed = pid in (0, None)
+        if not attributed and not closed:
             continue
-        seen.add(key)
-        out.append({"proto": c.get("proto", ""), "remote_address": address, "remote_port": port,
-                    "state": c.get("state", ""), "pid": c.get("pid")})
-    return out
+        key = (c.get("proto", ""), address, port)
+        if key in best and best[key]["attributed"] and not attributed:
+            continue
+        best[key] = {"proto": c.get("proto", ""), "remote_address": address, "remote_port": port,
+                     "state": c.get("state", ""), "pid": pid if attributed else 0, "attributed": attributed}
+    return list(best.values())
 
 
 def build_expected(package_id: str, family, sample, truth: dict, detonation: dict, seconds_before_capture: float) -> dict:
@@ -139,11 +147,18 @@ def build_expected(package_id: str, family, sample, truth: dict, detonation: dic
             facts.append({"id": f"S-R{i}", "type": "parent", "name": p["name"], "pid": p["pid"], "parent_name": parent["name"],
                           "description": f"{p['name']} is started by {parent['name']}", "verified": True, "source": source})
     for i, c in enumerate(sample_connections(truth, [p["pid"] for p in procs]), 1):
+        if c["attributed"]:
+            name = by_pid.get(c["pid"], {}).get("name", "?")
+            desc = (f"{name} (PID {c['pid']}) {c['proto']} {c['state'] or ''} to "
+                    f"{c['remote_address']}:{c['remote_port']} (fake internet)").replace("  ", " ")
+        else:
+            desc = (f"{c['proto']} connection to {c['remote_address']}:{c['remote_port']} (fake internet) seen during "
+                    f"the run but closed by capture (TIME_WAIT, no owner PID); on the isolated lab network this is the "
+                    f"sample's C2 beacon or an OS probe - compare with the baseline")
         facts.append({"id": f"S-N{i}", "type": "connection", "remote_address": c["remote_address"],
-                      "remote_port": c["remote_port"], "pid": c["pid"],
-                      "description": f"{by_pid.get(c['pid'], {}).get('name', '?')} (PID {c['pid']}) {c['proto']} "
-                                     f"{c['state'] or ''} to {c['remote_address']}:{c['remote_port']} (fake internet)".replace("  ", " "),
-                      "verified": True, "source": "lab ground truth: netstat -ano inside the VM before the capture"})
+                      "remote_port": c["remote_port"], "pid": c["pid"], "attributed": c["attributed"],
+                      "description": desc, "verified": True,
+                      "source": "lab ground truth: netstat -ano sampled inside the VM across the run"})
     for i, p in enumerate(procs, 1):
         facts.append({"id": f"S-F{i}", "type": "any_finding", "process": p["name"], "min_severity": "Low",
                       "description": f"MemoryGraph should flag {p['name']} (PID {p['pid']}) at least once",
