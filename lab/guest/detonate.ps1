@@ -19,6 +19,8 @@ $result["file_type"] = $FileType
 $result["started_utc"] = [datetime]::UtcNow
 $out = "C:\lab\out\detonation.json"
 if (-not (Test-Path "C:\lab\out")) { New-Item -ItemType Directory -Path "C:\lab\out" -Force | Out-Null }
+# Start each run with no leftover network samples from a previous detonation.
+Remove-Item "C:\lab\out\netsamples.txt", "C:\lab\out\stop-net.flag" -Force -ErrorAction SilentlyContinue
 
 try {
     if ($DropDir -eq "") { $DropDir = Join-Path $env:USERPROFILE "Downloads" }
@@ -54,6 +56,11 @@ try {
         $result["launch"] = "rundll32.exe $dllArgs"
     }
     $result["launched_utc"] = $launched
+
+    # Sample network connections throughout the run in the background, so short-lived beacons are not
+    # missed by the single netstat at capture time. collect.ps1 stops it and unions the samples.
+    Start-Process -WindowStyle Hidden -FilePath "powershell.exe" `
+        -ArgumentList "-NoProfile", "-ExecutionPolicy", "Bypass", "-File", "C:\lab\net-sampler.ps1" | Out-Null
 
     # Find the process that runs the sample (some samples move or delete themselves at once).
     $pids = @()

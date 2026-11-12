@@ -30,8 +30,18 @@ foreach ($p in Get-WmiObject Win32_Process) {
 }
 $truth["processes"] = $processes
 
+# Stop the background network sampler and give it a moment to exit, then union its samples with a
+# final live netstat. A short-lived beacon (failed-TLS connect, etc.) is caught in at least one sample
+# even though it is gone by capture time. Dedup by protocol + remote endpoint + PID so repeated
+# attempts to the same C2 (each on a new local port) collapse to one row.
+"stop" | Out-File -FilePath "C:\lab\out\stop-net.flag" -Encoding ascii -ErrorAction SilentlyContinue
+Start-Sleep -Milliseconds 500
+
 $connections = @()
-foreach ($line in (netstat.exe -ano)) {
+$seen = @{}
+$lines = @(netstat.exe -ano)
+if (Test-Path "C:\lab\out\netsamples.txt") { $lines += Get-Content "C:\lab\out\netsamples.txt" }
+foreach ($line in $lines) {
     $parts = ($line.Trim() -split "\s+")
     if ($parts.Count -lt 4) { continue }
     if ($parts[0] -ne "TCP" -and $parts[0] -ne "UDP") { continue }
@@ -40,7 +50,8 @@ foreach ($line in (netstat.exe -ano)) {
     $c["local"] = $parts[1]
     $c["remote"] = $parts[2]
     if ($parts[0] -eq "TCP") { $c["state"] = $parts[3]; $c["pid"] = [int]$parts[4] } else { $c["state"] = ""; $c["pid"] = [int]$parts[3] }
-    $connections += $c
+    $key = $c["proto"] + "|" + $c["remote"] + "|" + $c["pid"]
+    if (-not $seen.ContainsKey($key)) { $seen[$key] = $true; $connections += $c }
 }
 $truth["connections"] = $connections
 } catch {

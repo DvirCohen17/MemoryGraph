@@ -399,7 +399,7 @@ class GuestStepTests(TempDir):
         pipeline.push_guest_scripts(VM(), "v.vmx")
         self.assertIn(("dir", "C:\\lab\\out"), calls)
         copies = [c for c in calls if c[0] == "copy"]
-        self.assertEqual([c[1] for c in copies], ["lab-json.ps1", "detonate.ps1", "collect.ps1"])
+        self.assertEqual([c[1] for c in copies], ["lab-json.ps1", "detonate.ps1", "collect.ps1", "net-sampler.ps1"])
         self.assertEqual(copies[2][2], "C:\\lab\\collect.ps1")
         for name in pipeline.GUEST_SCRIPTS:
             self.assertTrue((pipeline.HOST_GUEST_DIR / name).is_file(), name)

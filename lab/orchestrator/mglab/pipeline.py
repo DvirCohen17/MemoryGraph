@@ -20,7 +20,7 @@ GUEST_COLLECT = r"C:\lab\collect.ps1"
 GUEST_DETONATION_JSON = r"C:\lab\out\detonation.json"
 GUEST_TRUTH_JSON = r"C:\lab\out\groundtruth.json"
 GUEST_LAB = r"C:\lab"
-GUEST_SCRIPTS = ("lab-json.ps1", "detonate.ps1", "collect.ps1")
+GUEST_SCRIPTS = ("lab-json.ps1", "detonate.ps1", "collect.ps1", "net-sampler.ps1")
 HOST_GUEST_DIR = Path(__file__).resolve().parents[2] / "guest"     # lab/guest: always the current version
 
 
