@@ -19,6 +19,33 @@ GUEST_DETONATE = r"C:\lab\detonate.ps1"
 GUEST_COLLECT = r"C:\lab\collect.ps1"
 GUEST_DETONATION_JSON = r"C:\lab\out\detonation.json"
 GUEST_TRUTH_JSON = r"C:\lab\out\groundtruth.json"
+GUEST_LAB = r"C:\lab"
+GUEST_SCRIPTS = ("lab-json.ps1", "detonate.ps1", "collect.ps1")
+HOST_GUEST_DIR = Path(__file__).resolve().parents[2] / "guest"     # lab/guest: always the current version
+
+
+def push_guest_scripts(vm, vmx: str, source: Path = HOST_GUEST_DIR) -> None:
+    """Copy the current guest scripts into the VM after the revert, so fixes need no template rebuild."""
+    for folder in (GUEST_LAB, GUEST_LAB + r"\in", GUEST_LAB + r"\out"):
+        vm.make_guest_dir(vmx, folder)
+    for name in GUEST_SCRIPTS:
+        vm.copy_to_guest(vmx, str(Path(source) / name), GUEST_LAB + "\\" + name)
+
+
+def run_guest_step(vm, vmx: str, script: str, arguments: str, result_guest: str, result_host: Path, what: str) -> dict:
+    """Run a guest script and fetch its JSON. The JSON decides success, not the exit code; its errors are shown."""
+    output = ""
+    try:
+        output = vm.run_powershell(vmx, script, arguments, timeout=300, check=False) or ""
+    finally:
+        try:
+            vm.copy_from_guest(vmx, result_guest, str(result_host))
+        except Exception as exc:  # noqa: BLE001
+            raise DetonationError(f"{what} wrote no result in the VM ({exc}). vmrun said: {output.strip()[:500]}") from exc
+    data = json.loads(Path(result_host).read_text(encoding="utf-8-sig"))
+    if data.get("fatal"):
+        raise DetonationError(f"{what} failed inside the VM: {data['fatal']}")
+    return data
 
 
 class DetonationError(Exception):
@@ -83,6 +110,7 @@ def run_capture(cfg, vm, guest, cache=None, family=None, sample=None, *, seconds
     try:
         vm.start(vmx)
         waited = vm.wait_until_ready(vmx, cfg.boot_timeout)
+        push_guest_scripts(vm, vmx)
         detonation = {}
         if sample is not None:
             archive = cache.archive_path(sample.sha256)
@@ -97,9 +125,8 @@ def run_capture(cfg, vm, guest, cache=None, family=None, sample=None, *, seconds
             if cfg.drop_dir:
                 arguments += f" -DropDir {cfg.drop_dir}"
             log(f"[{pid}] starting {family.name} {sample.sha256[:12]}")
-            vm.run_powershell(vmx, GUEST_DETONATE, arguments, timeout=300)
-            vm.copy_from_guest(vmx, GUEST_DETONATION_JSON, str(pkg / "detonation.json"))
-            detonation = json.loads((pkg / "detonation.json").read_text(encoding="utf-8-sig"))
+            detonation = run_guest_step(vm, vmx, GUEST_DETONATE, arguments, GUEST_DETONATION_JSON,
+                                        pkg / "detonation.json", "detonate.ps1")
             if detonation.get("status") != "launched":
                 raise DetonationError(f"the sample did not start: {detonation.get('error', detonation.get('status'))}")
             log(f"[{pid}] running {seconds} s (PIDs {detonation.get('pids') or 'not found'})")
@@ -108,9 +135,9 @@ def run_capture(cfg, vm, guest, cache=None, family=None, sample=None, *, seconds
         sleep(seconds)
 
         log(f"[{pid}] recording processes and connections inside the VM")
-        vm.run_powershell(vmx, GUEST_COLLECT, timeout=300)
-        vm.copy_from_guest(vmx, GUEST_TRUTH_JSON, str(pkg / "groundtruth.json"))
-        truth = json.loads((pkg / "groundtruth.json").read_text(encoding="utf-8-sig"))
+        truth = run_guest_step(vm, vmx, GUEST_COLLECT, "", GUEST_TRUTH_JSON, pkg / "groundtruth.json", "collect.ps1")
+        if truth.get("errors"):
+            log(f"[{pid}] note: the collector reported {len(truth['errors'])} error(s), first: {truth['errors'][0][:200]}")
         collected = clock()
         sleep(3)
 

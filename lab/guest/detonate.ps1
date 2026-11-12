@@ -18,6 +18,7 @@ $result["requested_sha256"] = $Sha256.ToLower()
 $result["file_type"] = $FileType
 $result["started_utc"] = [datetime]::UtcNow
 $out = "C:\lab\out\detonation.json"
+if (-not (Test-Path "C:\lab\out")) { New-Item -ItemType Directory -Path "C:\lab\out" -Force | Out-Null }
 
 try {
     if ($DropDir -eq "") { $DropDir = Join-Path $env:USERPROFILE "Downloads" }
@@ -73,3 +74,4 @@ try {
     $result["error"] = [string]$_.Exception.Message
 }
 Write-LabJson $result $out
+exit 0

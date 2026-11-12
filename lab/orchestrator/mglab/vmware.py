@@ -78,7 +78,7 @@ class Vmrun:
         self._call(["copyFileFromGuestToHost", vmx, guest_path, host_path], guest=True)
 
     def run_in_guest(self, vmx: str, program: str, arguments: str = "", interactive: bool = True,
-                     wait: bool = True, timeout: float = 600) -> str:
+                     wait: bool = True, timeout: float = 600, check: bool = True) -> str:
         args = ["runProgramInGuest", vmx]
         if not wait:
             args.append("-noWait")
@@ -87,13 +87,16 @@ class Vmrun:
         args.append(program)
         if arguments:
             args.append(arguments)
-        return self._call(args, guest=True, timeout=timeout)
+        return self._call(args, guest=True, timeout=timeout, check=check)
 
-    def run_powershell(self, vmx: str, script: str, arguments: str = "", timeout: float = 600) -> str:
+    def make_guest_dir(self, vmx: str, guest_path: str) -> None:
+        self._call(["createDirectoryInGuest", vmx, guest_path], guest=True, check=False)   # fails if it exists: fine
+
+    def run_powershell(self, vmx: str, script: str, arguments: str = "", timeout: float = 600, check: bool = True) -> str:
         line = f"-NoProfile -ExecutionPolicy Bypass -File {script}"
         if arguments:
             line += " " + arguments
-        return self.run_in_guest(vmx, r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe", line, timeout=timeout)
+        return self.run_in_guest(vmx, r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe", line, timeout=timeout, check=check)
 
     def wait_until_ready(self, vmx: str, timeout: float) -> float:
         """Wait for VMware Tools and the desktop (explorer.exe). Returns the seconds waited."""

@@ -375,3 +375,55 @@ class StorageTests(TempDir):
 
 if __name__ == "__main__":
     unittest.main()
+
+
+class GuestStepTests(TempDir):
+    def test_scripts_are_pushed_after_the_revert(self):
+        calls = []
+
+        class VM:
+            def make_guest_dir(self, vmx, path):
+                calls.append(("dir", path))
+
+            def copy_to_guest(self, vmx, host, guest):
+                calls.append(("copy", Path(host).name, guest))
+
+        pipeline.push_guest_scripts(VM(), "v.vmx")
+        self.assertIn(("dir", "C:\\lab\\out"), calls)
+        copies = [c for c in calls if c[0] == "copy"]
+        self.assertEqual([c[1] for c in copies], ["lab-json.ps1", "detonate.ps1", "collect.ps1"])
+        self.assertEqual(copies[2][2], "C:\\lab\\collect.ps1")
+        for name in pipeline.GUEST_SCRIPTS:
+            self.assertTrue((pipeline.HOST_GUEST_DIR / name).is_file(), name)
+
+    def test_non_zero_exit_is_fine_when_the_result_exists(self):
+        class VM:
+            def run_powershell(self, vmx, script, args, timeout=0, check=True):
+                assert check is False
+                return "Guest program exited with non-zero exit code: 1"
+
+            def copy_from_guest(self, vmx, guest, host):
+                Path(host).write_text('{"processes": [], "errors": ["x"]}', encoding="utf-8")
+
+        data = pipeline.run_guest_step(VM(), "v.vmx", "c.ps1", "", "g", self.tmp / "t.json", "collect.ps1")
+        self.assertEqual(data["errors"], ["x"])
+
+    def test_missing_result_or_fatal_error_is_reported(self):
+        class Missing:
+            def run_powershell(self, *a, **k):
+                return "boom"
+
+            def copy_from_guest(self, *a):
+                raise vmware.VmrunError("file not found")
+
+        with self.assertRaises(pipeline.DetonationError) as info:
+            pipeline.run_guest_step(Missing(), "v.vmx", "c.ps1", "", "g", self.tmp / "t.json", "collect.ps1")
+        self.assertIn("boom", str(info.exception))
+
+        class Fatal(Missing):
+            def copy_from_guest(self, vmx, guest, host):
+                Path(host).write_text('{"fatal": "Access denied"}', encoding="utf-8")
+
+        with self.assertRaises(pipeline.DetonationError) as info:
+            pipeline.run_guest_step(Fatal(), "v.vmx", "c.ps1", "", "g", self.tmp / "t.json", "collect.ps1")
+        self.assertIn("Access denied", str(info.exception))

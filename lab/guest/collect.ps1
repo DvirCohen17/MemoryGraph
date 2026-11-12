@@ -5,6 +5,9 @@
 $ErrorActionPreference = "Continue"
 . "C:\lab\lab-json.ps1"
 $truth = @{}
+$out = "C:\lab\out\groundtruth.json"
+if (-not (Test-Path "C:\lab\out")) { New-Item -ItemType Directory -Path "C:\lab\out" -Force | Out-Null }
+try {
 $truth["taken_utc"] = [datetime]::UtcNow
 $truth["collector_pid"] = [int]$PID
 $truth["os"] = Get-LabOsInfo
@@ -40,4 +43,11 @@ foreach ($line in (netstat.exe -ano)) {
     $connections += $c
 }
 $truth["connections"] = $connections
-Write-LabJson $truth "C:\lab\out\groundtruth.json"
+} catch {
+    $truth["fatal"] = [string]$_.Exception.Message
+}
+$errs = @()
+foreach ($e in $Error) { $errs += [string]$e }
+$truth["errors"] = $errs
+Write-LabJson $truth $out
+exit 0
