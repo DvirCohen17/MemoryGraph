@@ -24,6 +24,10 @@ GUEST_SCRIPTS = ("lab-json.ps1", "detonate.ps1", "collect.ps1")
 HOST_GUEST_DIR = Path(__file__).resolve().parents[2] / "guest"     # lab/guest: always the current version
 
 
+class DetonationError(Exception):
+    pass
+
+
 def push_guest_scripts(vm, vmx: str, source: Path = HOST_GUEST_DIR) -> None:
     """Copy the current guest scripts into the VM after the revert, so fixes need no template rebuild."""
     for folder in (GUEST_LAB, GUEST_LAB + r"\in", GUEST_LAB + r"\out"):
@@ -33,23 +37,26 @@ def push_guest_scripts(vm, vmx: str, source: Path = HOST_GUEST_DIR) -> None:
 
 
 def run_guest_step(vm, vmx: str, script: str, arguments: str, result_guest: str, result_host: Path, what: str) -> dict:
-    """Run a guest script and fetch its JSON. The JSON decides success, not the exit code; its errors are shown."""
-    output = ""
+    """Run a guest script and fetch its JSON. The JSON decides success, not the exit code. If there is no JSON,
+    the script's console output (saved in the VM by cmd.exe) is fetched and shown."""
+    name = Path(script.replace("\\", "/")).stem
+    log_guest = rf"C:\lab\out\{name}.log"
+    output = vm.run_powershell(vmx, script, arguments, timeout=300, check=False, log=log_guest) or ""
     try:
-        output = vm.run_powershell(vmx, script, arguments, timeout=300, check=False) or ""
-    finally:
+        vm.copy_from_guest(vmx, result_guest, str(result_host))
+    except Exception as exc:  # noqa: BLE001
+        detail = output.strip()[:300]
+        log_host = Path(result_host).with_name(f"{name}.log")
         try:
-            vm.copy_from_guest(vmx, result_guest, str(result_host))
-        except Exception as exc:  # noqa: BLE001
-            raise DetonationError(f"{what} wrote no result in the VM ({exc}). vmrun said: {output.strip()[:500]}") from exc
+            vm.copy_from_guest(vmx, log_guest, str(log_host))
+            detail = log_host.read_text(encoding="utf-8", errors="replace").strip()[-2000:] or detail
+        except Exception:  # noqa: BLE001
+            pass
+        raise DetonationError(f"{what} wrote no result in the VM. Its output:\n{detail}") from exc
     data = json.loads(Path(result_host).read_text(encoding="utf-8-sig"))
     if data.get("fatal"):
         raise DetonationError(f"{what} failed inside the VM: {data['fatal']}")
     return data
-
-
-class DetonationError(Exception):
-    pass
 
 
 def utc_stamp(ts: float) -> str:

@@ -398,8 +398,8 @@ class GuestStepTests(TempDir):
 
     def test_non_zero_exit_is_fine_when_the_result_exists(self):
         class VM:
-            def run_powershell(self, vmx, script, args, timeout=0, check=True):
-                assert check is False
+            def run_powershell(self, vmx, script, args, timeout=0, check=True, log=""):
+                assert check is False and log.endswith("c.log")
                 return "Guest program exited with non-zero exit code: 1"
 
             def copy_from_guest(self, vmx, guest, host):
@@ -413,17 +413,30 @@ class GuestStepTests(TempDir):
             def run_powershell(self, *a, **k):
                 return "boom"
 
-            def copy_from_guest(self, *a):
+            def copy_from_guest(self, vmx, guest, host):
+                if guest.endswith(".log"):
+                    Path(host).write_text("ParserError: unexpected token", encoding="utf-8")
+                    return
                 raise vmware.VmrunError("file not found")
 
         with self.assertRaises(pipeline.DetonationError) as info:
             pipeline.run_guest_step(Missing(), "v.vmx", "c.ps1", "", "g", self.tmp / "t.json", "collect.ps1")
-        self.assertIn("boom", str(info.exception))
+        self.assertIn("ParserError", str(info.exception))     # the guest's own output is shown
 
         class Fatal(Missing):
-            def copy_from_guest(self, vmx, guest, host):
+            def copy_from_guest(self, vmx, guest, host):  # noqa: F811
                 Path(host).write_text('{"fatal": "Access denied"}', encoding="utf-8")
 
         with self.assertRaises(pipeline.DetonationError) as info:
             pipeline.run_guest_step(Fatal(), "v.vmx", "c.ps1", "", "g", self.tmp / "t.json", "collect.ps1")
         self.assertIn("Access denied", str(info.exception))
+
+
+class PowershellCommandTests(unittest.TestCase):
+    def test_log_redirection_goes_through_cmd(self):
+        calls = []
+        vm = vmware.Vmrun("vmrun.exe", "u", "p", runner=lambda a, t: (calls.append(list(a)) or (1, "exit code 1")))
+        vm.run_powershell("v.vmx", r"C:\lab\collect.ps1", check=False, log=r"C:\lab\out\collect.log")
+        self.assertEqual(calls[0][-2], r"C:\Windows\System32\cmd.exe")
+        self.assertEqual(calls[0][-1], r"/c C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe -NoProfile "
+                                       r"-ExecutionPolicy Bypass -File C:\lab\collect.ps1 > C:\lab\out\collect.log 2>&1")

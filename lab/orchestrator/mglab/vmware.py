@@ -92,11 +92,18 @@ class Vmrun:
     def make_guest_dir(self, vmx: str, guest_path: str) -> None:
         self._call(["createDirectoryInGuest", vmx, guest_path], guest=True, check=False)   # fails if it exists: fine
 
-    def run_powershell(self, vmx: str, script: str, arguments: str = "", timeout: float = 600, check: bool = True) -> str:
+    def run_powershell(self, vmx: str, script: str, arguments: str = "", timeout: float = 600, check: bool = True,
+                       log: str = "") -> str:
+        """Run a .ps1 in the guest. With `log`, everything PowerShell prints (including errors that stop the script
+        before it starts) is written to that guest file, through cmd.exe redirection."""
+        ps = r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe"
         line = f"-NoProfile -ExecutionPolicy Bypass -File {script}"
         if arguments:
             line += " " + arguments
-        return self.run_in_guest(vmx, r"C:\Windows\System32\WindowsPowerShell\v1.0\powershell.exe", line, timeout=timeout, check=check)
+        if log:
+            return self.run_in_guest(vmx, r"C:\Windows\System32\cmd.exe", f"/c {ps} {line} > {log} 2>&1",
+                                     timeout=timeout, check=check)
+        return self.run_in_guest(vmx, ps, line, timeout=timeout, check=check)
 
     def wait_until_ready(self, vmx: str, timeout: float) -> float:
         """Wait for VMware Tools and the desktop (explorer.exe). Returns the seconds waited."""
