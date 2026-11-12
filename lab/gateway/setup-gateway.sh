@@ -32,6 +32,9 @@ sed -i -E "s/^#?\s*service_bind_address\s+.*/service_bind_address ${LAB_IP}/" "$
 sed -i -E "s/^#?\s*dns_default_ip\s+.*/dns_default_ip ${LAB_IP}/" "$CONF"
 grep -q "^service_bind_address" "$CONF" || echo "service_bind_address ${LAB_IP}" >> "$CONF"
 grep -q "^dns_default_ip" "$CONF" || echo "dns_default_ip ${LAB_IP}" >> "$CONF"
+# REMnux's default inetsim.conf ships the DNS service OFF. Without it, names never resolve to the
+# gateway and samples that use a C2 domain make no connection at all. Make sure it is enabled.
+grep -qE "^\s*start_service\s+dns" "$CONF" || echo "start_service dns" >> "$CONF"
 
 echo "[gateway] traffic to ANY address is answered here (samples with hard-coded C2 IPs)"
 sysctl -w net.ipv4.ip_forward=0 >/dev/null     # never route anywhere
