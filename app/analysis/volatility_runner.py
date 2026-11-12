@@ -271,6 +271,21 @@ def _tail(text: str, lines: int) -> str:
     return "\n".join(parts[-lines:])
 
 
+SYMBOLS_MISSING = "Volatility could not build the Windows symbol table for this image."
+_SYMBOL_URL = re.compile(r"download/symbols/([\w.-]+\.pdb)/([0-9A-Fa-f]{33,40})/", re.I)
+
+
+def missing_symbol_file(stderr: str):
+    """``(pdb name, GUID+age)`` from the symbol-server address in Volatility's offline error, or None."""
+    match = _SYMBOL_URL.search(stderr or "")
+    return (match.group(1), match.group(2).upper()) if match else None
+
+
+def is_symbol_failure(error: str) -> bool:
+    """True when a failure text (explain_failure output) says the kernel symbol table could not be built."""
+    return SYMBOLS_MISSING in (error or "")
+
+
 def classify_failure(stderr: str, plugin: str = "") -> str:
     """Reason for a failure, only when Volatility's own output says so ('' = no known pattern, show the output as it is)."""
     low = (stderr or "").lower()
@@ -287,10 +302,15 @@ def classify_failure(stderr: str, plugin: str = "") -> str:
                 "computer: add the folder that holds it under Settings → Extra symbol folders (docs/OFFLINE.md). It can also mean the tcpip.sys driver "
                 "is not resident in the dump.")
     if "symbol table requirement was not fulfilled" in low or "unsatisfied requirement" in low or "unable to validate the plugin requirements" in low:
-        return ("Volatility could not build the Windows symbol table for this image. MemoryGraph never goes online (Volatility runs with --offline), "
+        missing = missing_symbol_file(stderr)
+        which = (f" The missing file is {missing[0]} with ID {missing[1]} (Volatility would have downloaded it from Microsoft's "
+                 f"symbol server). On a computer with internet, run Volatility once on this image without --offline: it saves "
+                 f"the converted symbols ({missing[1][:32]}-{int(missing[1][32:] or '0', 16)}.json.xz) in its symbols folder; then copy that file "
+                 f"into a folder listed under Settings → Extra symbol folders." if missing else "")
+        return (SYMBOLS_MISSING + " MemoryGraph never goes online (Volatility runs with --offline), "
                 "so the symbol file of this Windows build must already be on this computer: add the folder that holds it under Settings → "
-                "Extra symbol folders (see docs/OFFLINE.md); each Volatility installation also has its own symbols folder. "
-                "It can also mean the file is not a Windows memory image.")
+                "Extra symbol folders (see docs/OFFLINE.md); each Volatility installation also has its own symbols folder."
+                + which + " It can also mean the file is not a Windows memory image.")
     if "invalidaddressexception" in low:
         return "Volatility tried to read memory that is not present in the dump (paged out or not captured)."
     if "no such file" in low or "cannot find the file" in low:

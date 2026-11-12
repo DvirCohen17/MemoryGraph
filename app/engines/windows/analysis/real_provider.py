@@ -24,7 +24,7 @@ from app.engines.windows.analysis import os_profile, plugin_registry as registry
 from app.engines.windows.analysis.normalizer import flatten_rows
 from app.analysis.pipeline import analyze_plugins
 from app.analysis.volatility_runner import (
-    VolatilityTool, check_tool, describe_os, find_volatility, global_args, run_plugin, version_note,
+    VolatilityTool, check_tool, describe_os, find_volatility, global_args, is_symbol_failure, run_plugin, version_note,
 )
 from app.analysis.dump import validate_dump  # noqa: F401  (shared by every engine; re-exported here for older callers)
 from app.errors import AnalysisCancelled, DumpFileError, VolatilityUnusable
@@ -283,6 +283,17 @@ class RealProvider:
         try:
             execute(first, 1)      # symbols first, on their own
             info = results.get("windows.info") or known.get("windows.info")
+            if info is not None and info.status != "Completed" and is_symbol_failure(info.error):
+                # Every other windows.* plugin needs the same kernel symbols: running them would only fail ~40 times,
+                # slowly, with the processes fighting over Volatility's symbol cache. One clear reason instead.
+                reason = ("Not run: windows.info could not build the kernel symbol table for this image, and every plugin needs it. "
+                          "Add the missing symbol file (see windows.info), then use Re-run failed plugins.")
+                for name in rest:
+                    results[name] = PluginResult(name, "Failed", [{"Status": "Failed", "Error": reason}], reason)
+                    fractions[name] = 1.0
+                    self._event(plugin_event, name, "failed", reason)
+                log.warning("Kernel symbols missing: %d plugins not run", len(rest))
+                return [results[n] for n in names if n in results]
             profile = os_profile.from_rows(flatten_rows(info.rows)) if info is not None and info.status == "Completed" else os_profile.OsProfile()
             log.info("Image: %s", profile.name)
             runnable, extra = self._plan(rest, profile, results, fractions, plugin_event, vol2_state, info)

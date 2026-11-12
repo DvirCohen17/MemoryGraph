@@ -95,3 +95,17 @@ def test_rw005_the_symbol_failure_message_does_not_tell_an_offline_tool_to_downl
     assert "internet" not in message.lower() and "symbol folders" in message.lower() and "--offline" in message
     tcpip = classify_failure("Unable to locate symbols for the memory image's tcpip module", "windows.netstat")
     assert "internet" not in tcpip.lower() and "symbol folders" in tcpip.lower()
+
+
+def test_rw_missing_kernel_symbols_name_the_exact_file():
+    from app.analysis.volatility_runner import explain_failure, is_symbol_failure, missing_symbol_file
+    # Windows 10 22H2 build 19045.3803 lab image, Volatility 2.28.2 offline (2026-11-12)
+    stderr = ("WARNING  volatility3.framework.plugins: Automagic exception occurred: volatility3.framework.exceptions.OfflineException: "
+              "Volatility 3 is offline: unable to access http://msdl.microsoft.com/download/symbols/ntkrnlmp.pdb/"
+              "D9424FC4861E47C10FAD1B35DEC6DCC81/ntkrnlmp.pdb\nUnable to validate the plugin requirements: "
+              "['plugins.Info.kernel.symbol_table_name']")
+    assert missing_symbol_file(stderr) == ("ntkrnlmp.pdb", "D9424FC4861E47C10FAD1B35DEC6DCC81")
+    text = explain_failure(stderr, 1, "windows.info")
+    assert is_symbol_failure(text)
+    assert "D9424FC4861E47C10FAD1B35DEC6DCC8-1.json.xz" in text and "Extra symbol folders" in text
+    assert not is_symbol_failure(explain_failure("Traceback (most recent call last):\nKeyError: 'x'", 1, "windows.pslist"))
