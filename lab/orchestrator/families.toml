@@ -178,7 +178,7 @@ look_for = [
 
 [[family]]
 name = "QakBot"
-signature = "QakBot"
+signature = "Quakbot"
 malpedia = "win.qakbot"
 guests = ["win10", "win7"]
 file_types = ["dll"]
@@ -246,7 +246,7 @@ look_for = [
 
 [[family]]
 name = "Raccoon"
-signature = "Raccoon"
+signature = "RaccoonStealer"
 malpedia = "win.raccoon"
 guests = ["win10", "win11", "win7"]
 description = "Raccoon Stealer, a malware-as-a-service info stealer that collects browser data, crypto wallets and system information."
@@ -337,7 +337,7 @@ look_for = [
 
 [[family]]
 name = "AveMariaRAT"
-signature = "AveMaria"
+signature = "AveMariaRAT"
 malpedia = "win.ave_maria"
 guests = ["win7", "win10"]
 description = "Ave Maria / Warzone RAT: remote access with credential theft, often hollowing into a .NET host process."
@@ -389,7 +389,7 @@ look_for = [
 
 [[family]]
 name = "Orcus"
-signature = "Orcus"
+signature = "OrcusRAT"
 malpedia = "win.orcus_rat"
 guests = ["win7", "win10"]
 description = "Orcus RAT, a .NET remote access trojan with a plugin system."
@@ -415,7 +415,7 @@ look_for = [
 
 [[family]]
 name = "SmokeLoader"
-signature = "SmokeLoader"
+signature = "Smoke Loader"
 malpedia = "win.smokeloader"
 guests = ["win7", "win10"]
 description = "SmokeLoader, a modular downloader/bot that injects into explorer.exe and pulls further payloads."
@@ -554,11 +554,11 @@ look_for = [
 ]
 
 [[family]]
-name = "XMRig"
-signature = "XMRig"
+name = "CoinMiner"
+signature = "CoinMiner"
 malpedia = "win.xmrig"
 guests = ["win10", "win11"]
-description = "XMRig, an open-source Monero miner commonly dropped as a coinminer payload."
+description = "Cryptocurrency miners (mostly XMRig-based Monero miners) dropped as a coinminer payload."
 look_for = [
   "The miner process started from Downloads or a dropped folder",
   "High private-memory footprint (malfind)",
