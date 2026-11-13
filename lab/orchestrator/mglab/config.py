@@ -49,6 +49,7 @@ class LabConfig:
     drop_dir: str = ""
     boot_timeout: int = 600
     auth_key_env: str = "MALWAREBAZAAR_AUTH_KEY"
+    malshare_key_env: str = "MALSHARE_API_KEY"
     malpedia_token_env: str = "MALPEDIA_API_TOKEN"
     triage_token_env: str = "TRIAGE_API_TOKEN"
     sources: List[str] = field(default_factory=lambda: ["malwarebazaar"])
@@ -110,6 +111,7 @@ def load_lab_config(path: Path) -> LabConfig:
         drop_dir=run.get("drop_dir", ""),
         boot_timeout=int(run.get("boot_timeout", 600)),
         auth_key_env=bazaar.get("auth_key_env", "MALWAREBAZAAR_AUTH_KEY"),
+        malshare_key_env=sources_cfg.get("malshare_key_env", "MALSHARE_API_KEY"),
         malpedia_token_env=sources_cfg.get("malpedia_token_env", "MALPEDIA_API_TOKEN"),
         triage_token_env=sources_cfg.get("triage_token_env", "TRIAGE_API_TOKEN"),
         sources=list(sources_cfg.get("order") or ["malwarebazaar"]),

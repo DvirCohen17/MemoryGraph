@@ -38,7 +38,8 @@ max_size_mb = 20
 # sample, then the next, until it has per_family. Unknown names error; a source whose token is missing
 # is simply left out. malwarebazaar needs the Auth-Key above; the others need a researcher API token
 # in the named environment variable, and (for malpedia) a per-family id in families.toml.
-order = ["malwarebazaar"]        # e.g. ["malwarebazaar", "triage", "malpedia"] once you have tokens
+order = ["malwarebazaar"]        # e.g. ["malwarebazaar", "malshare", "triage", "malpedia"] once you have keys
+malshare_key_env  = "MALSHARE_API_KEY"      # https://malshare.com  (free, instant API key; family match is best-effort)
 malpedia_token_env = "MALPEDIA_API_TOKEN"   # https://malpedia.caad.fkie.fraunhofer.de (researcher account)
 triage_token_env  = "TRIAGE_API_TOKEN"      # https://tria.ge  (account -> API key)
 

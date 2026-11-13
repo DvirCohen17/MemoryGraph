@@ -192,6 +192,27 @@ class SourceTests(TempDir):
         with self.assertRaises(sources.SourceError):
             src.fetch(bad, "7z")
 
+    def test_malshare_source(self):
+        from mglab import sources
+        raw = b"malshare-sample"
+        sha = hashlib.sha256(raw).hexdigest()
+
+        def opener(request, timeout):
+            if "action=search" in request.full_url:
+                return json.dumps([{"sha256": sha, "added": "2026-01-01", "size": 15}, {"sha256": "short"}]).encode()
+            return raw   # action=getfile -> raw bytes
+
+        src = sources.MalShareSource("KEY", opener=opener)
+        self.assertTrue(src.enabled())
+        found = src.find(self._family(signature="AgentTesla"), 10)
+        self.assertEqual([s.sha256 for s in found], [sha])          # bad-length hash dropped
+        self.assertEqual(found[0].tags, ("malshare",))
+        # a "not found" text reply doesn't match the sha and is rejected
+        bad = sources.Sample(sha256="e" * 64, family="AgentTesla", signature="x", file_type="exe",
+                             file_name="x.exe", file_size=0, first_seen="")
+        with self.assertRaises(sources.SourceError):
+            src.fetch(bad, "7z")
+
     def test_build_sources_and_select(self):
         from mglab import sources
         cfg = SimpleNamespace(sources=["malwarebazaar"], auth_key_env="MB_K",

@@ -200,8 +200,65 @@ class TriageSource(_TokenSource):
         return wrap_infected_zip(raw, sample.file_name or sample.sha256, seven_zip)
 
 
+class MalShareSource(Source):
+    """MalShare (malshare.com): free self-service API key, large recent corpus. It serves the raw file,
+    wrapped here into an 'infected' zip. Family match is by MalShare's full-text search on the family
+    signature (filenames, sources, YARA hits), so labels are best-effort - the SHA-256 is still verified,
+    only the family tag is less authoritative than MalwareBazaar/Malpedia. Auth is a query-string key
+    (MalShare's only mechanism)."""
+    name = "malshare"
+    base = "https://malshare.com/api.php"
+
+    def __init__(self, api_key: str, opener: Optional[Opener] = None, timeout: float = 120.0):
+        self._key = (api_key or "").strip()
+        self._open = opener or _default_open
+        self.timeout = timeout
+
+    def enabled(self) -> bool:
+        return bool(self._key)
+
+    def _request(self, params: dict) -> bytes:
+        url = self.base + "?" + urllib.parse.urlencode(params)
+        request = urllib.request.Request(url, headers={"User-Agent": USER_AGENT})
+        try:
+            return self._open(request, self.timeout)
+        except urllib.error.HTTPError as exc:
+            if exc.code in (401, 403):
+                raise SourceError("MalShare refused the API key") from exc
+            raise SourceError(f"MalShare HTTP error {exc.code}") from exc
+        except urllib.error.URLError as exc:
+            raise SourceError(f"cannot reach MalShare: {exc.reason}") from exc
+
+    def find(self, family, limit: int) -> List[Sample]:
+        body = self._request({"api_key": self._key, "action": "search", "query": family.signature})
+        try:
+            data = json.loads(body)
+        except ValueError as exc:
+            raise SourceError("MalShare returned something that is not JSON") from exc
+        rows = data if isinstance(data, list) else (data or {}).get("data") or []
+        ext = family.file_types[0] if family.file_types else "exe"
+        out = []
+        for row in rows[: max(limit, 0)]:
+            sha = str(row.get("sha256") or "").lower()
+            if len(sha) != 64:
+                continue
+            out.append(Sample(sha256=sha, family=family.name, signature=family.signature,
+                              file_type=ext, file_name=f"{sha[:12]}.{ext}",
+                              file_size=int(row.get("size") or 0), first_seen=str(row.get("added") or ""),
+                              tags=("malshare",)))
+        return out
+
+    def fetch(self, sample: Sample, seven_zip: str) -> bytes:
+        raw = self._request({"api_key": self._key, "action": "getfile", "hash": sample.sha256})
+        got = hashlib.sha256(raw).hexdigest()   # a "not found" reply is small text and simply fails this check
+        if got != sample.sha256:
+            raise SourceError(f"downloaded file hashes to {got[:12]}, expected {sample.sha256[:12]}")
+        return wrap_infected_zip(raw, sample.file_name or sample.sha256, seven_zip)
+
+
 _REGISTRY = {
     "malwarebazaar": lambda cfg, opener: MalwareBazaarSource(_env(cfg.auth_key_env), opener),
+    "malshare": lambda cfg, opener: MalShareSource(_env(cfg.malshare_key_env), opener),
     "malpedia": lambda cfg, opener: MalpediaSource(_env(cfg.malpedia_token_env), opener),
     "triage": lambda cfg, opener: TriageSource(_env(cfg.triage_token_env), opener),
 }
