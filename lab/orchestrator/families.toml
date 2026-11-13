@@ -202,3 +202,366 @@ look_for = [
   "Injected code in explorer.exe or a browser (malfind)",
   "HTTPS connections to the C2",
 ]
+
+# --- Expanded commodity Windows families (stealers, RATs, loaders, bankers, miners) ---
+
+[[family]]
+name = "Vidar"
+signature = "Vidar"
+malpedia = "win.vidar"
+guests = ["win10", "win11", "win7"]
+description = "A C++ information stealer derived from Arkei, sold since 2018. It grabs browser credentials, cookies, crypto wallets and files, often fetching its config from a C2 first."
+look_for = [
+  "The sample process started by explorer.exe from the Downloads folder, or a hollowed .NET host (RegAsm.exe, MSBuild.exe, AppLaunch.exe)",
+  "Private executable (RWX) memory in that process (malfind)",
+  "Outgoing HTTP(S) connections to the fake internet to fetch config or exfiltrate",
+  "Access to browser credential/cookie stores under %LOCALAPPDATA%",
+]
+
+[[family]]
+name = "Stealc"
+signature = "Stealc"
+malpedia = "win.stealc"
+guests = ["win10", "win11"]
+description = "A lightweight stealer sold since 2023, modelled on Vidar and Raccoon. It downloads legitimate DLLs from its C2 and exfiltrates browser and wallet data."
+look_for = [
+  "The sample process started by explorer.exe from the Downloads folder, or a hollowed .NET host (RegAsm.exe, MSBuild.exe, AppLaunch.exe)",
+  "Private executable (RWX) memory in that process (malfind)",
+  "Outgoing HTTP(S) connections to the fake internet to fetch config or exfiltrate",
+  "Access to browser credential/cookie stores under %LOCALAPPDATA%",
+]
+
+[[family]]
+name = "Rhadamanthys"
+signature = "Rhadamanthys"
+malpedia = "win.rhadamanthys"
+guests = ["win10", "win11"]
+description = "A modular stealer (2022+) with a multi-stage loader. It steals credentials, crypto wallets and documents, running much of its logic from injected memory."
+look_for = [
+  "The sample process started by explorer.exe from the Downloads folder, or a hollowed .NET host (RegAsm.exe, MSBuild.exe, AppLaunch.exe)",
+  "Private executable (RWX) memory in that process (malfind)",
+  "Outgoing HTTP(S) connections to the fake internet to fetch config or exfiltrate",
+  "Access to browser credential/cookie stores under %LOCALAPPDATA%",
+]
+
+[[family]]
+name = "Raccoon"
+signature = "Raccoon"
+malpedia = "win.raccoon"
+guests = ["win10", "win11", "win7"]
+description = "Raccoon Stealer, a malware-as-a-service info stealer that collects browser data, crypto wallets and system information."
+look_for = [
+  "The sample process started by explorer.exe from the Downloads folder, or a hollowed .NET host (RegAsm.exe, MSBuild.exe, AppLaunch.exe)",
+  "Private executable (RWX) memory in that process (malfind)",
+  "Outgoing HTTP(S) connections to the fake internet to fetch config or exfiltrate",
+  "Access to browser credential/cookie stores under %LOCALAPPDATA%",
+]
+
+[[family]]
+name = "CryptBot"
+signature = "CryptBot"
+malpedia = "win.cryptbot"
+guests = ["win10", "win11"]
+description = "A stealer spread through cracked-software sites. It takes browser credentials, cookies and crypto wallets."
+look_for = [
+  "The sample process started by explorer.exe from the Downloads folder, or a hollowed .NET host (RegAsm.exe, MSBuild.exe, AppLaunch.exe)",
+  "Private executable (RWX) memory in that process (malfind)",
+  "Outgoing HTTP(S) connections to the fake internet to fetch config or exfiltrate",
+  "Access to browser credential/cookie stores under %LOCALAPPDATA%",
+]
+
+[[family]]
+name = "MetaStealer"
+signature = "MetaStealer"
+malpedia = "win.metastealer"
+guests = ["win10", "win11"]
+description = "A RedLine-derived .NET stealer targeting browser and wallet data."
+look_for = [
+  "The sample process started by explorer.exe from the Downloads folder, or a hollowed .NET host (RegAsm.exe, MSBuild.exe, AppLaunch.exe)",
+  "Private executable (RWX) memory in that process (malfind)",
+  "Outgoing HTTP(S) connections to the fake internet to fetch config or exfiltrate",
+  "Access to browser credential/cookie stores under %LOCALAPPDATA%",
+]
+
+[[family]]
+name = "RisePro"
+signature = "RisePro"
+malpedia = "win.risepro"
+guests = ["win10", "win11"]
+description = "A C++ stealer (2022+) tied to PrivateLoader distribution. It steals credentials, cards and wallets."
+look_for = [
+  "The sample process started by explorer.exe from the Downloads folder, or a hollowed .NET host (RegAsm.exe, MSBuild.exe, AppLaunch.exe)",
+  "Private executable (RWX) memory in that process (malfind)",
+  "Outgoing HTTP(S) connections to the fake internet to fetch config or exfiltrate",
+  "Access to browser credential/cookie stores under %LOCALAPPDATA%",
+]
+
+[[family]]
+name = "LokiBot"
+signature = "Loki"
+malpedia = "win.lokipws"
+guests = ["win7", "win10"]
+description = "LokiBot (Loki PWS), a long-running stealer for browser, mail and FTP credentials, sent out over HTTP."
+look_for = [
+  "The sample process started by explorer.exe from the Downloads folder, or a hollowed .NET host (RegAsm.exe, MSBuild.exe, AppLaunch.exe)",
+  "Private executable (RWX) memory in that process (malfind)",
+  "Outgoing HTTP(S) connections to the fake internet to fetch config or exfiltrate",
+  "Access to browser credential/cookie stores under %LOCALAPPDATA%",
+]
+
+[[family]]
+name = "HawkEye"
+signature = "HawkEye"
+malpedia = "win.hawkeye_keylogger"
+guests = ["win7", "win10"]
+description = "A .NET keylogger and stealer kit. It logs keystrokes and steals saved credentials, exfiltrating by SMTP, FTP or HTTP."
+look_for = [
+  "The sample process started by explorer.exe from Downloads, or a hollowed .NET host",
+  "Private executable (RWX) memory (malfind)",
+  "Outgoing SMTP/FTP/HTTP(S) connections to the fake internet",
+  "Keystroke/clipboard capture artifacts in memory",
+]
+
+[[family]]
+name = "MassLogger"
+signature = "MassLogger"
+malpedia = "win.masslogger"
+guests = ["win7", "win10", "win11"]
+description = "A .NET keylogger and credential stealer with clipboard and screenshot capture."
+look_for = [
+  "The sample process started by explorer.exe from Downloads, or a hollowed .NET host",
+  "Private executable (RWX) memory (malfind)",
+  "Outgoing SMTP/FTP/HTTP(S) connections to the fake internet",
+  "Keystroke/clipboard capture artifacts in memory",
+]
+
+[[family]]
+name = "AveMariaRAT"
+signature = "AveMaria"
+malpedia = "win.ave_maria"
+guests = ["win7", "win10"]
+description = "Ave Maria / Warzone RAT: remote access with credential theft, often hollowing into a .NET host process."
+look_for = [
+  "The sample process started by explorer.exe from Downloads, or a hollowed .NET host",
+  "Private executable (RWX) memory (malfind)",
+  "A persistent C2 connection to the fake internet",
+  "A Run key, scheduled task or copy under %APPDATA% (not always)",
+]
+
+[[family]]
+name = "NetWire"
+signature = "NetWire"
+malpedia = "win.netwire"
+guests = ["win7", "win10"]
+description = "NetWire RAT, a remote access trojan with keylogging and credential theft."
+look_for = [
+  "The sample process started by explorer.exe from Downloads, or a hollowed .NET host",
+  "Private executable (RWX) memory (malfind)",
+  "A persistent C2 connection to the fake internet",
+  "A Run key, scheduled task or copy under %APPDATA% (not always)",
+]
+
+[[family]]
+name = "BitRAT"
+signature = "BitRAT"
+malpedia = "win.bitrat"
+guests = ["win10", "win11"]
+description = "A C++ remote access trojan with hidden VNC, keylogging, mining and webcam capture."
+look_for = [
+  "The sample process started by explorer.exe from Downloads, or a hollowed .NET host",
+  "Private executable (RWX) memory (malfind)",
+  "A persistent C2 connection to the fake internet",
+  "A Run key, scheduled task or copy under %APPDATA% (not always)",
+]
+
+[[family]]
+name = "VenomRAT"
+signature = "VenomRAT"
+malpedia = "win.venomrat"
+guests = ["win10", "win11"]
+description = "A .NET RAT forked from Quasar/AsyncRAT with hidden VNC and stealer plugins."
+look_for = [
+  "The sample process started by explorer.exe from Downloads, or a hollowed .NET host",
+  "Private executable (RWX) memory (malfind)",
+  "A persistent C2 connection to the fake internet",
+  "A Run key, scheduled task or copy under %APPDATA% (not always)",
+]
+
+[[family]]
+name = "Orcus"
+signature = "Orcus"
+malpedia = "win.orcus_rat"
+guests = ["win7", "win10"]
+description = "Orcus RAT, a .NET remote access trojan with a plugin system."
+look_for = [
+  "The sample process started by explorer.exe from Downloads, or a hollowed .NET host",
+  "Private executable (RWX) memory (malfind)",
+  "A persistent C2 connection to the fake internet",
+  "A Run key, scheduled task or copy under %APPDATA% (not always)",
+]
+
+[[family]]
+name = "LimeRAT"
+signature = "LimeRAT"
+malpedia = "win.limerat"
+guests = ["win10", "win7"]
+description = "A small open-source .NET RAT with miner, stealer and other modules."
+look_for = [
+  "The sample process started by explorer.exe from Downloads, or a hollowed .NET host",
+  "Private executable (RWX) memory (malfind)",
+  "A persistent C2 connection to the fake internet",
+  "A Run key, scheduled task or copy under %APPDATA% (not always)",
+]
+
+[[family]]
+name = "SmokeLoader"
+signature = "SmokeLoader"
+malpedia = "win.smokeloader"
+guests = ["win7", "win10"]
+description = "SmokeLoader, a modular downloader/bot that injects into explorer.exe and pulls further payloads."
+look_for = [
+  "The loader process started by explorer.exe from Downloads",
+  "Injected or hollowed child/host process (malfind RWX)",
+  "Outgoing HTTP(S) to the fake internet to pull the next stage",
+  "A second payload process or injected code region",
+]
+
+[[family]]
+name = "Amadey"
+signature = "Amadey"
+malpedia = "win.amadey"
+guests = ["win7", "win10", "win11"]
+description = "Amadey bot/loader: collects system info and downloads additional payloads, with simple persistence."
+look_for = [
+  "The loader process started by explorer.exe from Downloads",
+  "Injected or hollowed child/host process (malfind RWX)",
+  "Outgoing HTTP(S) to the fake internet to pull the next stage",
+  "A second payload process or injected code region",
+]
+
+[[family]]
+name = "GuLoader"
+signature = "GuLoader"
+malpedia = "win.cloudeye"
+guests = ["win10", "win11"]
+description = "GuLoader, a shellcode-based downloader that injects its payload into a legitimate process from encrypted blobs."
+look_for = [
+  "The loader process started by explorer.exe from Downloads",
+  "Injected or hollowed child/host process (malfind RWX)",
+  "Outgoing HTTP(S) to the fake internet to pull the next stage",
+  "A second payload process or injected code region",
+]
+
+[[family]]
+name = "IcedID"
+signature = "IcedID"
+malpedia = "win.icedid"
+guests = ["win10", "win7"]
+file_types = ["exe", "dll"]
+dll_export = "DllRegisterServer"
+description = "IcedID (BokBot), a banking trojan and loader delivered as a DLL that injects into processes and fetches modules."
+look_for = [
+  "The sample or its DLL host (rundll32.exe / regsvr32.exe) running",
+  "Injection into a browser or explorer.exe (malfind RWX)",
+  "C2 connections to the fake internet",
+  "Web-inject or module artifacts in memory (not always)",
+]
+
+[[family]]
+name = "Ursnif"
+signature = "Gozi"
+malpedia = "win.isfb"
+guests = ["win7", "win10"]
+file_types = ["exe", "dll"]
+dll_export = "DllRegisterServer"
+description = "Ursnif / Gozi / ISFB, a long-running banking trojan and loader using web injects and process injection."
+look_for = [
+  "The sample or its DLL host (rundll32.exe / regsvr32.exe) running",
+  "Injection into a browser or explorer.exe (malfind RWX)",
+  "C2 connections to the fake internet",
+  "Web-inject or module artifacts in memory (not always)",
+]
+
+[[family]]
+name = "PrivateLoader"
+signature = "PrivateLoader"
+malpedia = "win.privateloader"
+guests = ["win10", "win11"]
+description = "PrivateLoader, a pay-per-install downloader distributing stealers and other malware."
+look_for = [
+  "The loader process started by explorer.exe from Downloads",
+  "Injected or hollowed child/host process (malfind RWX)",
+  "Outgoing HTTP(S) to the fake internet to pull the next stage",
+  "A second payload process or injected code region",
+]
+
+[[family]]
+name = "ModiLoader"
+signature = "ModiLoader"
+malpedia = "win.dbatloader"
+guests = ["win10", "win7"]
+description = "ModiLoader / DBatLoader, a Delphi downloader that stages and injects payloads."
+look_for = [
+  "The loader process started by explorer.exe from Downloads",
+  "Injected or hollowed child/host process (malfind RWX)",
+  "Outgoing HTTP(S) to the fake internet to pull the next stage",
+  "A second payload process or injected code region",
+]
+
+[[family]]
+name = "TrickBot"
+signature = "TrickBot"
+malpedia = "win.trickbot"
+guests = ["win7", "win10"]
+file_types = ["exe", "dll"]
+dll_export = "DllRegisterServer"
+description = "TrickBot, a modular banking trojan and loader with credential-theft and lateral-movement modules."
+look_for = [
+  "The sample or its DLL host (rundll32.exe / regsvr32.exe) running",
+  "Injection into a browser or explorer.exe (malfind RWX)",
+  "C2 connections to the fake internet",
+  "Web-inject or module artifacts in memory (not always)",
+]
+
+[[family]]
+name = "Zloader"
+signature = "Zloader"
+malpedia = "win.zloader"
+guests = ["win7", "win10"]
+file_types = ["exe", "dll"]
+dll_export = "DllRegisterServer"
+description = "Zloader (Terdot), a Zeus-derived banking trojan and loader."
+look_for = [
+  "The sample or its DLL host (rundll32.exe / regsvr32.exe) running",
+  "Injection into a browser or explorer.exe (malfind RWX)",
+  "C2 connections to the fake internet",
+  "Web-inject or module artifacts in memory (not always)",
+]
+
+[[family]]
+name = "DanaBot"
+signature = "DanaBot"
+malpedia = "win.danabot"
+guests = ["win10", "win7"]
+file_types = ["exe", "dll"]
+dll_export = "DllRegisterServer"
+description = "DanaBot, a Delphi banking trojan and stealer with a modular C2 protocol."
+look_for = [
+  "The sample or its DLL host (rundll32.exe / regsvr32.exe) running",
+  "Injection into a browser or explorer.exe (malfind RWX)",
+  "C2 connections to the fake internet",
+  "Web-inject or module artifacts in memory (not always)",
+]
+
+[[family]]
+name = "XMRig"
+signature = "XMRig"
+malpedia = "win.xmrig"
+guests = ["win10", "win11"]
+description = "XMRig, an open-source Monero miner commonly dropped as a coinminer payload."
+look_for = [
+  "The miner process started from Downloads or a dropped folder",
+  "High private-memory footprint (malfind)",
+  "A connection attempt to a mining pool via the fake internet",
+  "High sustained CPU from the miner process",
+]
