@@ -28,6 +28,8 @@ class Family:
     dll_export: str = "DllRegisterServer"
     description: str = ""
     look_for: List[str] = field(default_factory=list)
+    malpedia: str = ""   # Malpedia family id, e.g. "win.agent_tesla" (optional)
+    triage: str = ""     # Hatching Triage family tag, e.g. "agenttesla" (optional; defaults to the slug)
 
     @property
     def slug(self) -> str:
@@ -47,6 +49,9 @@ class LabConfig:
     drop_dir: str = ""
     boot_timeout: int = 600
     auth_key_env: str = "MALWAREBAZAAR_AUTH_KEY"
+    malpedia_token_env: str = "MALPEDIA_API_TOKEN"
+    triage_token_env: str = "TRIAGE_API_TOKEN"
+    sources: List[str] = field(default_factory=lambda: ["malwarebazaar"])
     per_family: int = 1
     max_size_mb: int = 20
     storage_mode: str = "github"
@@ -81,6 +86,7 @@ def load_lab_config(path: Path) -> LabConfig:
     account = data.get("guest_account", {})
     run = data.get("run", {})
     bazaar = data.get("bazaar", {})
+    sources_cfg = data.get("sources", {})
     storage = data.get("storage", {})
     guests = {}
     for name, section in (data.get("guests") or {}).items():
@@ -104,6 +110,9 @@ def load_lab_config(path: Path) -> LabConfig:
         drop_dir=run.get("drop_dir", ""),
         boot_timeout=int(run.get("boot_timeout", 600)),
         auth_key_env=bazaar.get("auth_key_env", "MALWAREBAZAAR_AUTH_KEY"),
+        malpedia_token_env=sources_cfg.get("malpedia_token_env", "MALPEDIA_API_TOKEN"),
+        triage_token_env=sources_cfg.get("triage_token_env", "TRIAGE_API_TOKEN"),
+        sources=list(sources_cfg.get("order") or ["malwarebazaar"]),
         per_family=int(bazaar.get("per_family", 1)),
         max_size_mb=int(bazaar.get("max_size_mb", 20)),
         storage_mode=mode,
@@ -135,6 +144,8 @@ def load_families(path: Path) -> List[Family]:
             dll_export=entry.get("dll_export", "DllRegisterServer"),
             description=entry.get("description", ""),
             look_for=list(entry.get("look_for", [])),
+            malpedia=entry.get("malpedia", ""),
+            triage=entry.get("triage", ""),
         ))
     names = [f.name for f in families]
     if len(set(names)) != len(names):

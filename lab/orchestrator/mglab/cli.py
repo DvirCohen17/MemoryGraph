@@ -16,8 +16,9 @@ import shutil
 import sys
 from pathlib import Path
 
-from .bazaar import BazaarClient, BazaarError, SampleCache, pick_samples
+from .bazaar import BazaarClient, BazaarError, SampleCache, pick_samples, select_samples
 from .config import ConfigError, load_families, load_lab_config
+from .sources import SourceError, build_sources
 from .pipeline import DetonationError, run_capture
 from .storage import Storage, StorageError
 from .vmware import SafetyError, Vmrun, VmrunError, check_isolation, check_memory_settings
@@ -72,11 +73,11 @@ def cmd_check(cfg, args) -> int:
                 report(False, f"{guest.name}: {exc}")
     print("Tools")
     report(Path(cfg.seven_zip).is_file() or shutil.which(cfg.seven_zip) is not None, f"7-Zip: {cfg.seven_zip}")
-    try:
-        cfg.auth_key()
-        report(True, f"MalwareBazaar Auth-Key in {cfg.auth_key_env}")
-    except ConfigError as exc:
-        report(False, str(exc))
+    enabled = [s.name for s in build_sources(cfg)]
+    report(bool(enabled), f"sample sources enabled: {', '.join(enabled) if enabled else 'none'} "
+           f"(wanted: {', '.join(cfg.sources)})")
+    if "malwarebazaar" in cfg.sources and "malwarebazaar" not in enabled:
+        report(False, f"MalwareBazaar Auth-Key missing: set {cfg.auth_key_env}")
     free = shutil.disk_usage(Path(cfg.work_dir).anchor or ".").free
     rams = [_guest_ram_gib(g.vmx) for g in cfg.guests.values() if Path(g.vmx).is_file()]
     max_ram = max(rams) if rams else 4.0
@@ -111,23 +112,45 @@ def cmd_probe(cfg, args) -> int:
 
 
 def cmd_fetch(cfg, args) -> int:
-    client = BazaarClient(cfg.auth_key())
     cache = SampleCache(cfg.cache_dir)
+    sources = build_sources(cfg)
+    if not sources:
+        raise ConfigError(f"no sample sources are enabled (set {cfg.auth_key_env}, or add tokens and list "
+                          f"them under [sources] order in lab.toml)")
+    print(f"sources: {', '.join(s.name for s in sources)}")
     per_family = args.per_family or cfg.per_family
     for family in _families(args):
         have = cache.samples(family.name)
-        missing = per_family - len(have)
-        if missing <= 0:
+        need = per_family - len(have)
+        if need <= 0:
             print(f"{family.name}: {len(have)} cached")
             continue
-        rows = client.samples_for_signature(family.signature, limit=200)
-        picked = pick_samples(rows, family, missing, cfg.max_size_mb, cache.known())
-        if not picked:
-            print(f"{family.name}: no suitable sample ({', '.join(family.file_types)}, <= {cfg.max_size_mb} MB)")
-            continue
-        for sample in picked:
-            cache.add(sample, client.download(sample.sha256))
-            print(f"{family.name}: {sample.sha256} ({sample.file_type}, {sample.file_size:,} bytes, first seen {sample.first_seen})")
+        known = cache.known()
+        got = 0
+        for src in sources:
+            if got >= need:
+                break
+            try:
+                found = src.find(family, limit=200)
+            except SourceError as exc:
+                print(f"{family.name}: {src.name} skipped ({exc})")
+                continue
+            for sample in select_samples(found, family, need - got, cfg.max_size_mb, known):
+                try:
+                    archive = src.fetch(sample, cfg.seven_zip)
+                except SourceError as exc:
+                    print(f"{family.name}: {src.name} could not download {sample.sha256[:12]} ({exc})")
+                    continue
+                cache.add(sample, archive)
+                known.add(sample.sha256)
+                got += 1
+                size = f"{sample.file_size:,} bytes" if sample.file_size else "size unknown"
+                print(f"{family.name}: {sample.sha256} from {src.name} ({sample.file_type}, {size})")
+                if got >= need:
+                    break
+        if got == 0:
+            print(f"{family.name}: no new sample from any source "
+                  f"({', '.join(family.file_types)}, <= {cfg.max_size_mb} MB)")
     print(f"Cached in {cfg.cache_dir} (password-protected zips; they are only unpacked inside the VM).")
     return 0
 

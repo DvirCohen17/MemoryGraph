@@ -30,8 +30,17 @@ boot_timeout = 600
 
 [bazaar]
 auth_key_env = "MALWAREBAZAAR_AUTH_KEY"   # name of the environment variable holding your Auth-Key
-per_family = 1                  # how many samples of each family to fetch and run
+per_family = 1                  # how many samples of each family to fetch and run (across all sources)
 max_size_mb = 20
+
+[sources]
+# Which providers 'fetch' pulls from, in order. It fills each family from the first source that has a
+# sample, then the next, until it has per_family. Unknown names error; a source whose token is missing
+# is simply left out. malwarebazaar needs the Auth-Key above; the others need a researcher API token
+# in the named environment variable, and (for malpedia) a per-family id in families.toml.
+order = ["malwarebazaar"]        # e.g. ["malwarebazaar", "triage", "malpedia"] once you have tokens
+malpedia_token_env = "MALPEDIA_API_TOKEN"   # https://malpedia.caad.fkie.fraunhofer.de (researcher account)
+triage_token_env  = "TRIAGE_API_TOKEN"      # https://tria.ge  (account -> API key)
 
 [storage]
 mode = "github"                 # github = upload and keep only text locally; local = keep packages in work_dir

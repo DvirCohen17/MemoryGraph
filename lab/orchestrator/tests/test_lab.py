@@ -1,4 +1,5 @@
 """Tests for the lab orchestrator without VMware, 7-Zip, gh or the internet:  python -m unittest discover -s tests"""
+import hashlib
 import json
 import os
 import shutil
@@ -116,6 +117,106 @@ class BazaarTests(TempDir):
         cache.mark_run(sample.sha256, "win10", "win10-agenttesla-ffffffff-x")
         self.assertEqual(cache.already_run(sample.sha256, "win10"), "win10-agenttesla-ffffffff-x")
         self.assertIsNone(cache.already_run(sample.sha256, "win11"))
+
+
+class SourceTests(TempDir):
+    def _family(self, **kw):
+        base = dict(name="AgentTesla", slug="agenttesla", signature="AgentTesla",
+                    file_types=["exe"], malpedia="", triage="")
+        base.update(kw)
+        return SimpleNamespace(**base)
+
+    def test_wrap_infected_zip(self):
+        from mglab import sources
+
+        def fake_run(cmd):
+            Path(cmd[-2]).write_bytes(b"PK\x03\x04zipped")   # the output path is second-to-last arg
+            return SimpleNamespace(returncode=0, stdout=b"")
+
+        blob = sources.wrap_infected_zip(b"rawmalware", "x.exe", "7z", runner=fake_run)
+        self.assertTrue(blob.startswith(b"PK"))
+        with self.assertRaises(sources.SourceError):
+            sources.wrap_infected_zip(b"x", "x", "7z", runner=lambda c: SimpleNamespace(returncode=2, stdout=b"boom"))
+
+    def test_bazaar_source(self):
+        from mglab import sources
+
+        def opener(request, timeout):
+            if b"get_file" in (request.data or b""):
+                return b"PK\x03\x04mbzip"
+            return json.dumps({"query_status": "ok", "data": [
+                {"sha256_hash": "A" * 64, "file_type": "exe", "file_size": 1000, "signature": "AgentTesla"}]}).encode()
+
+        src = sources.MalwareBazaarSource("KEY", opener=opener)
+        self.assertTrue(src.enabled())
+        found = src.find(self._family(), 10)
+        self.assertEqual(found[0].sha256, "a" * 64)
+        self.assertEqual(src.fetch(found[0], "7z"), b"PK\x03\x04mbzip")
+        self.assertFalse(sources.MalwareBazaarSource("", opener=opener).enabled())
+
+    def test_malpedia_source(self):
+        from mglab import sources
+
+        def opener(request, timeout):
+            if "/list/samples/" in request.full_url:
+                return json.dumps([{"sha256": "C" * 64, "version": "2024"}, {"sha256": "bad"}]).encode()
+            return b"PK\x03\x04malpediazip"
+
+        src = sources.MalpediaSource("TOKEN", opener=opener)
+        self.assertEqual(src.find(self._family(), 10), [])                       # no malpedia id -> nothing
+        found = src.find(self._family(malpedia="win.agent_tesla"), 10)
+        self.assertEqual([s.sha256 for s in found], ["c" * 64])                  # lower-cased, "bad" dropped
+        self.assertEqual(src.fetch(found[0], "7z"), b"PK\x03\x04malpediazip")
+
+    def test_triage_source_wraps_and_verifies(self):
+        from mglab import sources
+        raw = b"the-real-sample-bytes"
+        sha = hashlib.sha256(raw).hexdigest()
+
+        def opener(request, timeout):
+            if "/search" in request.full_url:
+                return json.dumps({"data": [{"sha256": sha, "id": "tr-1", "filename": "inv.exe", "filesize": 21}]}).encode()
+            return raw
+
+        def fake_run(cmd):
+            Path(cmd[-2]).write_bytes(b"PK\x03\x04wrapped")
+            return SimpleNamespace(returncode=0, stdout=b"")
+
+        src = sources.TriageSource("TOKEN", opener=opener)
+        found = src.find(self._family(triage="agenttesla"), 10)
+        self.assertEqual(found[0].sha256, sha)
+        self.assertIn("tr-1", found[0].tags)                    # the Triage sample id is kept for fetch
+        # A downloaded file whose hash does not match the expected sha256 is rejected before any wrap.
+        bad = sources.Sample(sha256="d" * 64, family="AgentTesla", signature="x", file_type="exe",
+                             file_name="y.exe", file_size=0, first_seen="", tags=("triage", "tr-1"))
+        with self.assertRaises(sources.SourceError):
+            src.fetch(bad, "7z")
+
+    def test_build_sources_and_select(self):
+        from mglab import sources
+        cfg = SimpleNamespace(sources=["malwarebazaar"], auth_key_env="MB_K",
+                              malpedia_token_env="MP_K", triage_token_env="TR_K")
+        os.environ.pop("MB_K", None)
+        self.assertEqual(sources.build_sources(cfg, opener=lambda r, t: b"{}"), [])   # no key -> none enabled
+        os.environ["MB_K"] = "KEY"
+        try:
+            enabled = sources.build_sources(cfg, opener=lambda r, t: b"{}")
+            self.assertEqual([s.name for s in enabled], ["malwarebazaar"])
+        finally:
+            os.environ.pop("MB_K", None)
+        with self.assertRaises(sources.SourceError):
+            sources.build_sources(SimpleNamespace(sources=["nope"], auth_key_env="MB_K",
+                                                  malpedia_token_env="MP_K", triage_token_env="TR_K"))
+
+    def test_select_samples_filters(self):
+        from mglab import sources
+        fam = self._family()
+        mk = lambda sha, ft="exe", sz=10: sources.Sample(sha256=sha, family="AgentTesla", signature="x",
+                                                          file_type=ft, file_name="x", file_size=sz, first_seen="")
+        got = bazaar.select_samples(
+            [mk("a" * 64), mk("b" * 64, ft="dll"), mk("c" * 64, sz=999 * 2**20), mk("a" * 64)],
+            fam, 5, 20, exclude=set())
+        self.assertEqual([s.sha256 for s in got], ["a" * 64])                    # dll + huge + dup dropped
 
 
 class VmwareTests(TempDir):

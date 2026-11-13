@@ -116,6 +116,24 @@ class BazaarClient:
         return body
 
 
+def select_samples(samples: List["Sample"], family, count: int, max_size_mb: int, exclude: set) -> List["Sample"]:
+    """Filter an already-built Sample list (from any source): file type the lab can start, not too big,
+    not already cached or picked. Keeps the source's order (newest first)."""
+    picked, seen = [], set(exclude)
+    for sample in samples:
+        if not sample.sha256 or sample.sha256 in seen:
+            continue
+        if sample.file_type and sample.file_type not in family.file_types:
+            continue
+        if sample.file_size and sample.file_size > max_size_mb * 1024 * 1024:
+            continue
+        seen.add(sample.sha256)
+        picked.append(sample)
+        if len(picked) >= count:
+            break
+    return picked
+
+
 def pick_samples(rows: List[dict], family, count: int, max_size_mb: int, exclude: set) -> List[Sample]:
     """Newest first (MalwareBazaar's order), only file types the lab can start, not too big, not used before."""
     picked = []

@@ -9,6 +9,7 @@
 [[family]]
 name = "AgentTesla"
 signature = "AgentTesla"
+malpedia = "win.agent_tesla"
 guests = ["win10", "win11", "win7"]
 file_types = ["exe"]
 description = "A .NET information stealer and keylogger sold since 2014. It steals saved passwords from browsers, e-mail and FTP clients, logs keystrokes and takes screenshots, and sends them out by SMTP, FTP, HTTP or Telegram."
@@ -22,6 +23,7 @@ look_for = [
 [[family]]
 name = "AsyncRAT"
 signature = "AsyncRAT"
+malpedia = "win.asyncrat"
 guests = ["win10", "win11"]
 file_types = ["exe"]
 description = "An open-source .NET remote access trojan. It connects to its server over TLS, can run commands, steal data and load plugins in memory. Many builds check for virtual machines and quit."
@@ -34,6 +36,7 @@ look_for = [
 [[family]]
 name = "RemcosRAT"
 signature = "RemcosRAT"
+malpedia = "win.remcos"
 guests = ["win10", "win11", "win7"]
 file_types = ["exe"]
 description = "Remcos (\"Remote Control & Surveillance\") is a commercial C++ remote access tool widely abused as a RAT: keylogging, screen and microphone capture, remote shell. Its configuration is stored RC4-encrypted in a resource named SETTINGS."
@@ -47,6 +50,7 @@ look_for = [
 [[family]]
 name = "RedLineStealer"
 signature = "RedLineStealer"
+malpedia = "win.redline_stealer"
 guests = ["win10", "win11"]
 file_types = ["exe"]
 description = "A .NET information stealer sold as a service since 2020. It collects browser passwords, cookies, credit cards, crypto wallets and system details and sends them to its panel over WCF (net.tcp/SOAP). It usually runs once and has no persistence."
@@ -59,6 +63,7 @@ look_for = [
 [[family]]
 name = "Formbook"
 signature = "Formbook"
+malpedia = "win.formbook"
 guests = ["win10", "win11", "win7"]
 file_types = ["exe"]
 description = "A C information stealer and form grabber (XLoader is its successor). It hollows a Windows program, injects into explorer.exe and then into a randomly chosen Windows binary, and hides its HTTP C2 among many decoy domains."
@@ -71,6 +76,7 @@ look_for = [
 [[family]]
 name = "QuasarRAT"
 signature = "QuasarRAT"
+malpedia = "win.quasar_rat"
 guests = ["win10", "win11", "win7"]
 file_types = ["exe"]
 description = "An open-source .NET remote administration tool used as a RAT by several groups. It copies itself (by default to %APPDATA%\\SubDir\\Client.exe), adds persistence and connects to its server over TLS."
@@ -83,6 +89,7 @@ look_for = [
 [[family]]
 name = "LummaStealer"
 signature = "LummaStealer"
+malpedia = "win.lumma_stealer"
 guests = ["win10", "win11"]
 file_types = ["exe"]
 description = "A C information stealer sold as a service since 2022. It steals browser data and crypto wallets and posts them to its C2 over HTTPS. It is often delivered by loaders and checks its environment."
@@ -94,6 +101,7 @@ look_for = [
 [[family]]
 name = "XWorm"
 signature = "XWorm"
+malpedia = "win.xworm"
 guests = ["win10", "win11"]
 file_types = ["exe"]
 description = "A .NET RAT and stealer: remote control, keylogging, DDoS and ransomware plugins, spreading over USB. It reports new victims through Telegram and persists in several ways."
@@ -106,6 +114,7 @@ look_for = [
 [[family]]
 name = "njRAT"
 signature = "njrat"
+malpedia = "win.njrat"
 guests = ["win10", "win11", "win7"]
 file_types = ["exe"]
 description = "njRAT (Bladabindi), a .NET remote access trojan from 2013 still widely used. It adds itself to the firewall's allowed programs with netsh, persists with a Run key and logs keystrokes."
@@ -118,6 +127,7 @@ look_for = [
 [[family]]
 name = "SnakeKeylogger"
 signature = "SnakeKeylogger"
+malpedia = "win.404keylogger"
 guests = ["win10", "win11", "win7"]
 file_types = ["exe"]
 description = "A .NET keylogger and credential stealer (also called 404 Keylogger). It sends stolen data by SMTP, FTP or Telegram and often runs inside a hollowed .NET process."
@@ -130,6 +140,7 @@ look_for = [
 [[family]]
 name = "DCRat"
 signature = "DCRat"
+malpedia = "win.dcrat"
 guests = ["win10", "win11"]
 file_types = ["exe"]
 description = "DarkCrystal RAT, a cheap modular .NET remote access trojan. It drops copies of itself with names of Windows programs and creates scheduled tasks for them."
@@ -142,6 +153,7 @@ look_for = [
 [[family]]
 name = "NanoCore"
 signature = "NanoCore"
+malpedia = "win.nanocore"
 guests = ["win7", "win10"]
 file_types = ["exe"]
 description = "An older .NET remote access trojan (2013-2017) with plugins for surveillance and remote control. It copies itself into a GUID-named folder under %APPDATA% and persists with a scheduled task."
@@ -153,6 +165,7 @@ look_for = [
 [[family]]
 name = "Emotet"
 signature = "Heodo"
+malpedia = "win.emotet"
 guests = ["win10", "win7"]
 file_types = ["dll"]
 dll_export = "DllRegisterServer"
@@ -166,6 +179,7 @@ look_for = [
 [[family]]
 name = "QakBot"
 signature = "QakBot"
+malpedia = "win.qakbot"
 guests = ["win10", "win7"]
 file_types = ["dll"]
 dll_export = "DllRegisterServer"
@@ -178,6 +192,7 @@ look_for = [
 [[family]]
 name = "Dridex"
 signature = "Dridex"
+malpedia = "win.dridex"
 guests = ["win7"]
 file_types = ["dll", "exe"]
 dll_export = "DllRegisterServer"
