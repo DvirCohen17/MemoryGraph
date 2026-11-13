@@ -230,22 +230,34 @@ class MalShareSource(Source):
             raise SourceError(f"cannot reach MalShare: {exc.reason}") from exc
 
     def find(self, family, limit: int) -> List[Sample]:
-        body = self._request({"api_key": self._key, "action": "search", "query": family.signature})
-        try:
-            data = json.loads(body)
-        except ValueError as exc:
-            raise SourceError("MalShare returned something that is not JSON") from exc
-        rows = data if isinstance(data, list) else (data or {}).get("data") or []
+        # MalShare has no family field; its search matches filenames/sources/YARA-hit names. The family
+        # *name* (e.g. "Emotet") matches far more than the MalwareBazaar signature (e.g. "Heodo"), so try
+        # the name first, then the signature, and union the results.
+        terms = []
+        for term in (family.name, family.signature):
+            term = (term or "").strip()
+            if term and term not in terms:
+                terms.append(term)
         ext = family.file_types[0] if family.file_types else "exe"
-        out = []
-        for row in rows[: max(limit, 0)]:
-            sha = str(row.get("sha256") or "").lower()
-            if len(sha) != 64:
-                continue
-            out.append(Sample(sha256=sha, family=family.name, signature=family.signature,
-                              file_type=ext, file_name=f"{sha[:12]}.{ext}",
-                              file_size=int(row.get("size") or 0), first_seen=str(row.get("added") or ""),
-                              tags=("malshare",)))
+        out, seen = [], set()
+        for term in terms:
+            body = self._request({"api_key": self._key, "action": "search", "query": term})
+            try:
+                data = json.loads(body)
+            except ValueError as exc:
+                raise SourceError("MalShare returned something that is not JSON") from exc
+            rows = data if isinstance(data, list) else (data or {}).get("data") or []
+            for row in rows:
+                sha = str(row.get("sha256") or "").lower()
+                if len(sha) != 64 or sha in seen:
+                    continue
+                seen.add(sha)
+                out.append(Sample(sha256=sha, family=family.name, signature=family.signature,
+                                  file_type=ext, file_name=f"{sha[:12]}.{ext}",
+                                  file_size=int(row.get("size") or 0), first_seen=str(row.get("added") or ""),
+                                  tags=("malshare",)))
+                if len(out) >= limit:
+                    return out
         return out
 
     def fetch(self, sample: Sample, seven_zip: str) -> bytes:
